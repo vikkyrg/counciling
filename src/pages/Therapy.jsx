@@ -113,7 +113,7 @@ export default function Therapy() {
           title="Find the kind of support you need"
           description="Each service includes who it's for, what you'll work on, and what clients typically gain from it."
         />
-        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-7">
+        <div className="mt-10 grid items-start gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-7">
           {DETAILED_SERVICES.map((service, index) => (
             <ServiceDetailCard key={service.id} service={service} index={index} />
           ))}

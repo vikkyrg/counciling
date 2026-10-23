@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Icon from "./Icon.jsx";
-import BrandLogo from "./BrandLogo.jsx";
+import logo from "../assets/logo.png";
 import { SITE } from "../data/content.js";
 import { HOW_WE_HELP } from "../data/services.js";
 
@@ -28,10 +28,18 @@ export default function Footer() {
           <div>
             <Link
               to="/"
-              className="inline-flex rounded-2xl bg-background px-3 py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="inline-flex items-center rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               aria-label={`${SITE.name} — go to homepage`}
             >
-              <BrandLogo footer />
+              <img
+                src={logo}
+                alt=""
+                width="2170"
+                height="725"
+                className="h-12 w-auto"
+                loading="lazy"
+                decoding="async"
+              />
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-brand-200">
               A safe space to talk, heal, and grow. Confidential,

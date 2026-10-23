@@ -6,7 +6,7 @@ export default function BrandLogo({ footer = false }) {
       <span
         aria-hidden="true"
         className={`relative block shrink-0 overflow-hidden ${
-          footer ? "h-8 w-6" : "h-11 w-8 sm:h-12 sm:w-9 lg:h-14 lg:w-10"
+          footer ? "h-9 w-8" : "h-11 w-8 sm:h-12 sm:w-9 lg:h-14 lg:w-10"
         }`}
       >
         <img
@@ -22,7 +22,7 @@ export default function BrandLogo({ footer = false }) {
       <span
         className={
           footer
-            ? "text-sm font-extrabold leading-tight tracking-tight text-brand-900"
+            ? "text-base font-extrabold leading-tight tracking-tight text-brand-900"
             : "text-[15px] font-extrabold leading-tight tracking-tight text-[#243B2A] sm:text-base"
         }
       >

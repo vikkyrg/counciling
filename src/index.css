@@ -3,6 +3,7 @@
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", sans-serif;
+  --font-serif: "Playfair Display", Georgia, Cambria, "Times New Roman", Times, serif;
 
   /* ============================================================
      "The Master Mind" green brand ramp
@@ -133,6 +134,86 @@
   }
 
   @layer utilities {
+    .announcement-track {
+      display: flex;
+      width: max-content;
+      animation: announcement-scroll 42s linear infinite;
+    }
+
+    .announcement-group {
+      display: flex;
+      flex: none;
+      align-items: center;
+      gap: 2rem;
+      padding-right: 2rem;
+      white-space: nowrap;
+    }
+
+    .announcement-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 2rem;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    .announcement-separator {
+      color: #c9d8ad;
+      font-size: 11px;
+    }
+
+    .announcement-bar:hover .announcement-track,
+    .announcement-bar:focus-within .announcement-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes announcement-scroll {
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    @media (min-width: 640px) {
+      .announcement-item {
+        font-size: 13px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .announcement-track {
+        animation: none;
+        width: 100%;
+        justify-content: center;
+        transform: none;
+      }
+
+      .announcement-group {
+        display: none;
+      }
+
+      .announcement-group:first-child {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0 0.75rem;
+      }
+
+      .announcement-item {
+        display: none;
+      }
+
+      .announcement-item:first-child {
+        display: inline-flex;
+        font-size: 12px;
+      }
+
+      .announcement-separator {
+        display: none;
+      }
+    }
+
     html.has-scroll-reveal [data-reveal] {
       opacity: 0;
       transform: translate3d(0, 18px, 0);
@@ -362,5 +443,135 @@
         animation: none;
       }
     }
+  }
+}
+
+/* ============================================================
+   Brand cursor — The Mind Master
+   Written outside @layer so these rules win over Tailwind's
+   cursor-* utilities (e.g. the cursor-pointer labels in the
+   contact form) without needing !important.
+   ============================================================ */
+
+.cursor-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.cursor-layer:not(.is-hidden) {
+  opacity: 1;
+}
+
+/* Text fields keep the native I-beam, so hide the brand cursor entirely. */
+.cursor-layer.is-text {
+  opacity: 0;
+}
+
+.cursor-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.cursor-ring {
+  display: block;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(77, 124, 36, 0.45);
+  background-color: rgba(237, 243, 231, 0.32);
+  box-shadow: 0 0 14px rgba(92, 138, 51, 0.16);
+  transition:
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 240ms ease,
+    background-color 240ms ease,
+    box-shadow 240ms ease;
+}
+
+.cursor-dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 9999px;
+  background-color: #4d7c24;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.92),
+    0 0 10px rgba(92, 138, 51, 0.32);
+  transition:
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+/* Clickable elements: ring opens up, accent shifts to a brighter green. */
+.cursor-layer.is-hover .cursor-ring {
+  transform: scale(1.4);
+  border-color: rgba(127, 161, 88, 0.95);
+  background-color: rgba(242, 246, 236, 0.5);
+  box-shadow: 0 0 18px rgba(92, 138, 51, 0.22);
+}
+
+.cursor-layer.is-hover .cursor-dot {
+  transform: scale(0.7);
+  background-color: #5c8a33;
+}
+
+/* Quiet confirmation on press — the ring closes in as the dot deepens. */
+.cursor-layer.is-active .cursor-ring {
+  transform: scale(1.05);
+  border-color: rgba(77, 124, 36, 0.9);
+}
+
+.cursor-layer.is-active .cursor-dot {
+  transform: scale(1.4);
+  background-color: #36591b;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.cursor-fx,
+  html.cursor-fx body,
+  html.cursor-fx * {
+    cursor: none;
+  }
+
+  /* Native text caret everywhere you can type. */
+  html.cursor-fx input[type=text],
+  html.cursor-fx input[type=email],
+  html.cursor-fx input[type=tel],
+  html.cursor-fx input[type=url],
+  html.cursor-fx input[type=search],
+  html.cursor-fx input[type=password],
+  html.cursor-fx input:not([type]),
+  html.cursor-fx textarea,
+  html.cursor-fx [contenteditable="true"],
+  html.cursor-fx [contenteditable=""] {
+    cursor: text;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-layer,
+  .cursor-ring,
+  .cursor-dot {
+    transition: none;
+  }
+
+  /* No glow — a flat, still marker instead. */
+  .cursor-ring {
+    box-shadow: none;
+  }
+
+  .cursor-dot {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.92);
   }
 }

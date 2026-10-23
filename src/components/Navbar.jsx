@@ -11,6 +11,14 @@ const NAV_LINKS = [
   { to: "/contact", label: "Contact Us", icon: "mail" },
 ];
 
+const ANNOUNCEMENTS = [
+  "Your mental well-being matters",
+  "A safe space to talk, heal, and grow",
+  "Compassionate professional counselling",
+  "Take the first step toward a healthier mind",
+  "You deserve to be heard",
+];
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
@@ -35,6 +43,31 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-[#243B2A]/10 bg-[#FAF9F4]/95 backdrop-blur-md supports-[backdrop-filter]:bg-[#FAF9F4]/90">
+      <aside
+        aria-label="Announcements"
+        className="announcement-bar flex h-[32px] items-center overflow-hidden bg-[#36591B] text-white sm:h-[36px]"
+      >
+        <p className="sr-only">
+          {ANNOUNCEMENTS.join(". ")}.
+        </p>
+        <div className="announcement-viewport w-full overflow-hidden" aria-hidden="true">
+          <div className="announcement-track">
+            {[0, 1].map((copy) => (
+              <div className="announcement-group" key={copy}>
+                {ANNOUNCEMENTS.map((message, index) => (
+                  <span className="announcement-item" key={message}>
+                    {index > 0 && (
+                      <span className="announcement-separator">•</span>
+                    )}
+                    {message}
+                  </span>
+                ))}
+                <span className="announcement-separator">•</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </aside>
       <nav
         aria-label="Main navigation"
         className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"

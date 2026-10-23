@@ -34,7 +34,7 @@ export default function ServiceDetailCard({ service }) {
   return (
     <article
       id={service.id}
-      className="group flex h-full flex-col scroll-mt-28 rounded-[22px] border border-[#DDE8D3] bg-gradient-to-br from-white to-[#FCFDF9] p-6 shadow-[0_4px_14px_rgba(32,59,43,0.045)] transition-all duration-300 hover:-translate-y-1 hover:border-[#BFD1B2] hover:shadow-[0_10px_24px_rgba(32,59,43,0.085)] sm:p-7 lg:p-8"
+      className="group flex flex-col scroll-mt-28 rounded-[22px] border border-[#DDE8D3] bg-gradient-to-br from-white to-[#FCFDF9] p-6 shadow-[0_4px_14px_rgba(32,59,43,0.045)] transition-all duration-300 hover:-translate-y-1 hover:border-[#BFD1B2] hover:shadow-[0_10px_24px_rgba(32,59,43,0.085)] sm:p-6 lg:p-7"
     >
       <div className="flex items-center gap-3">
         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EAF1E3] text-[#36591B] transition-colors duration-300 group-hover:bg-[#DCE9D1]">
@@ -49,7 +49,7 @@ export default function ServiceDetailCard({ service }) {
         {service.description}
       </p>
 
-      <div className="mt-6 flex-1 space-y-5">
+      <div className="mt-5 space-y-4">
         <DetailList
           heading="Who it's for"
           items={service.forWho}
@@ -67,7 +67,7 @@ export default function ServiceDetailCard({ service }) {
         />
       </div>
 
-      <div className="mt-6">
+      <div className="mt-5">
         <Button
           to={bookHref}
           variant="secondary"

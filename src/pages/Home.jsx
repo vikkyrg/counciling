@@ -15,7 +15,7 @@ import {
   HOW_IT_WORKS,
 } from "../data/content.js";
 import { HOME_FAQS } from "../data/faqs.js";
-import heroImg from "../assets/hero-flowing.jpg";
+import heroImg from "../assets/hero-flowing.png";
 
 // Ensures the hero image entrance animation plays only once per page session,
 // even when navigating back to the home route.
@@ -76,7 +76,20 @@ function CornerBranch({ className = "" }) {
   );
 }
 
-// A single non-interactive concern tag: pale fill, thin sage border, checkmark chip.
+const CONCERN_ICONS = {
+  Anxiety: "brain",
+  Stress: "bolt",
+  Depression: "mood",
+  Overthinking: "chat",
+  Burnout: "alert",
+  "Relationship issues": "users",
+  "Self-esteem": "heart",
+  "Emotional regulation": "spark",
+  "Life transitions": "globe",
+  "Career stress": "briefcase",
+};
+
+// A single non-interactive concern tag with a relevant icon.
 function ConcernPill({ label }) {
   return (
     <li>
@@ -85,7 +98,7 @@ function ConcernPill({ label }) {
           aria-hidden="true"
           className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-600"
         >
-          <Icon name="check" className="h-3.5 w-3.5" />
+          <Icon name={CONCERN_ICONS[label] || "spark"} className="h-3.5 w-3.5" />
         </span>
         {label}
       </span>
@@ -335,7 +348,10 @@ export default function Home() {
             titleClassName="text-3xl font-extrabold tracking-tight text-brand-900 sm:text-4xl lg:text-[2.625rem] lg:leading-[1.15]"
             description="From one-on-one therapy to couples and career guidance, every service is delivered by certified counsellors in a confidential space."
           />
-          <div className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            data-reveal-stagger="200"
+            className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {HOW_WE_HELP.map((service) => (
               <ServiceCard key={service.id} {...service} />
             ))}
@@ -433,6 +449,7 @@ export default function Home() {
         <SectionHeading
           id="why-choose-title"
           eyebrow="Why choose us"
+          eyebrowLines
           title="Care you can feel safe with"
           description="The quality of the relationship with your counsellor is the strongest predictor of progress — so we protect it deliberately."
         />
@@ -695,45 +712,132 @@ export default function Home() {
       {/* 7. Testimonials */}
       <section
         aria-labelledby="testimonials-title"
-        className="relative isolate overflow-hidden bg-background py-20 sm:py-24 lg:py-28"
+        className="relative isolate overflow-hidden bg-[#faf8f5] py-20 sm:py-24 lg:py-28"
       >
-        {/* Soft decorative layers — purely decorative, behind all content */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-          {/* Warm ivory base with a gentle sage wash from the top center */}
-          <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_-10%,#edf3e7_0%,rgba(250,249,244,0)_60%)]" />
-          {/* Two soft, static sage shapes */}
-          <div className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-brand-200/45 blur-3xl" />
-          <div className="absolute -right-20 bottom-8 h-80 w-80 rounded-full bg-brand-100/70 blur-3xl" />
-          {/* Low-opacity organic curves, top-right and bottom-left */}
+        {/* Soft decorative background layers — warm ivory with pale sage organic shapes & botanical leaves */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+          {/* Subtle pale sage organic glow behind heading and cards */}
+          <div className="absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 rounded-[50%] bg-[#eef4ea]/70 blur-3xl" />
+          <div className="absolute -left-20 top-20 h-80 w-80 rounded-full bg-[#e3eedc]/50 blur-3xl" />
+          <div className="absolute -right-20 bottom-10 h-88 w-88 rounded-full bg-[#e7f0e2]/60 blur-3xl" />
+
+          {/* Left botanical leafy stem illustration (matching reference) */}
           <svg
-            className="absolute -right-16 -top-10 h-56 w-56 text-brand-300/25 sm:h-72 sm:w-72"
-            viewBox="0 0 200 200"
+            className="absolute -left-10 top-6 sm:top-12 h-64 w-64 sm:h-84 sm:w-84 md:h-96 md:w-96 text-[#6c8f62]/40"
+            viewBox="0 0 240 320"
             fill="none"
-            stroke="currentColor"
-            strokeWidth="1.2"
           >
-            <path d="M10 60C60 10 130 20 170 70s10 120-60 120S-20 120 30 70" />
-            <path d="M35 70C70 30 125 40 155 80s5 90-50 90-90-45-55-85" />
+            {/* Main stem */}
+            <path
+              d="M-20 280 Q60 220 110 80 Q130 30 160 10"
+              stroke="#5a7d50"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              opacity="0.6"
+            />
+            {/* Delicate leaves */}
+            <path
+              d="M160 10 C140 2 110 15 118 38 C125 58 152 40 160 10 Z"
+              fill="#749669"
+              opacity="0.55"
+            />
+            <path
+              d="M125 55 C90 40 65 65 85 92 C102 110 125 80 125 55 Z"
+              fill="#628657"
+              opacity="0.6"
+            />
+            <path
+              d="M115 105 C145 100 170 125 155 155 C140 175 115 140 115 105 Z"
+              fill="#789d6e"
+              opacity="0.55"
+            />
+            <path
+              d="M92 145 C60 145 40 180 62 205 C80 222 100 185 92 145 Z"
+              fill="#5e8253"
+              opacity="0.6"
+            />
+            <path
+              d="M75 195 C105 200 125 235 105 260 C90 275 68 238 75 195 Z"
+              fill="#6e9264"
+              opacity="0.5"
+            />
+            <path
+              d="M48 238 C20 250 15 290 42 305 C65 315 72 270 48 238 Z"
+              fill="#789d6e"
+              opacity="0.45"
+            />
           </svg>
+
+          {/* Right botanical outline leaf branch (matching reference) */}
           <svg
-            className="absolute -bottom-14 -left-12 h-52 w-52 text-brand-300/20 sm:h-64 sm:w-64"
-            viewBox="0 0 200 200"
+            className="absolute -right-8 top-4 sm:top-8 h-64 w-64 sm:h-80 sm:w-80 md:h-96 md:w-96 text-[#729468]/35"
+            viewBox="0 0 240 320"
             fill="none"
-            stroke="currentColor"
-            strokeWidth="1.2"
           >
-            <path d="M190 140c-50 50-120 40-160-10S20 20 90 20s150 70 100 120" />
-            <path d="M165 130c-40 40-95 32-125-8s-8-90 40-90 125 58 85 98" />
+            {/* Elegant branch curve */}
+            <path
+              d="M260 10 Q190 60 150 170 Q120 250 80 320"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            />
+            {/* Delicate line leaves */}
+            <path
+              d="M240 25 C200 20 180 50 195 75 C210 95 240 65 240 25 Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M185 85 C150 75 135 110 150 135 C165 155 190 125 185 85 Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M170 140 C205 150 215 190 195 215 C175 235 155 195 170 140 Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M142 195 C115 190 98 230 115 255 C130 275 152 245 142 195 Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M125 255 C155 270 160 305 138 325 C120 338 105 300 125 255 Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
           </svg>
+
+          {/* Bottom right soft foliage */}
+          <div className="absolute -right-16 -bottom-16 h-72 w-72 rounded-full bg-[#dcead6]/45 blur-2xl" />
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            id="testimonials-title"
-            eyebrow="Client experiences"
-            title="Real stories of finding support"
-            description="Shared with permission, names changed for privacy. Every journey is different — the first step isn't."
-          />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Header section matching reference precisely */}
+          <div className="mx-auto max-w-3xl text-center flex flex-col items-center">
+            <p className="flex items-center justify-center gap-4 text-xs font-bold uppercase tracking-[0.25em] text-[#4D7C24]">
+              <span aria-hidden="true" className="h-px w-10 bg-[#A9C186] sm:w-14" />
+              Real Stories
+              <span aria-hidden="true" className="h-px w-10 bg-[#A9C186] sm:w-14" />
+            </p>
+
+            {/* Section heading — same Plus Jakarta Sans treatment as every other home heading */}
+            <h2
+              id="testimonials-title"
+              className="mt-4 text-3xl font-extrabold leading-[1.15] tracking-tight text-brand-900 sm:text-4xl sm:leading-[1.15] md:text-[2.75rem]"
+            >
+              Real stories of finding support{" "}
+              
+            </h2>
+
+            {/* Centred, muted-green subtitle */}
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted sm:text-lg sm:leading-relaxed">
+              Shared with permission, names changed for privacy. Every journey is different — the first step isn't.
+            </p>
+          </div>
+
+          {/* Testimonial 3-Card Carousel */}
           <div className="mt-12 sm:mt-14">
             <TestimonialCarousel />
           </div>
