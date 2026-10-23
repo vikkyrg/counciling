@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 480" role="img" aria-label="Illustration of a calm person relaxing among soft plants under a warm sun">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#edf3e7"/>
+      <stop offset="1" stop-color="#faf9f4"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="480" rx="32" fill="url(#sky)"/>
+  <circle cx="470" cy="110" r="52" fill="#e8d9b5" opacity="0.95"/>
+  <circle cx="470" cy="110" r="70" fill="#e8d9b5" opacity="0.3"/>
+  <path d="M0 360 Q150 300 300 350 T600 340 V480 H0 Z" fill="#c9d8ad"/>
+  <path d="M0 400 Q180 350 360 395 T600 390 V480 H0 Z" fill="#a9c186" opacity="0.85"/>
+  <g>
+    <ellipse cx="300" cy="392" rx="150" ry="26" fill="#4d7c24" opacity="0.14"/>
+    <path d="M255 385 q45 -95 90 0 Z" fill="#4d7c24"/>
+    <circle cx="300" cy="278" r="30" fill="#f0c9a8"/>
+    <path d="M272 288 q28 -34 56 0 q-8 -46 -28 -46 t-28 46 Z" fill="#243b2a"/>
+    <path d="M258 340 q-26 12 -22 44" stroke="#e8d9b5" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <path d="M342 340 q26 12 22 44" stroke="#e8d9b5" stroke-width="16" fill="none" stroke-linecap="round"/>
+  </g>
+  <g stroke-linecap="round" fill="none">
+    <path d="M96 400 q0 -70 8 -96" stroke="#36591b" stroke-width="6"/>
+    <path d="M104 304 q-30 -8 -40 16 q28 10 40 -16 Z" fill="#7fa158" stroke="none"/>
+    <path d="M104 330 q30 -12 42 10 q-30 12 -42 -10 Z" fill="#4d7c24" stroke="none"/>
+    <path d="M512 408 q0 -60 -6 -82" stroke="#36591b" stroke-width="6"/>
+    <path d="M506 326 q28 -10 38 12 q-28 12 -38 -12 Z" fill="#7fa158" stroke="none"/>
+    <path d="M506 352 q-28 -8 -36 14 q26 10 36 -14 Z" fill="#4d7c24" stroke="none"/>
+  </g>
+  <g fill="#ffffff" opacity="0.85">
+    <circle cx="120" cy="120" r="20"/>
+    <circle cx="150" cy="130" r="26"/>
+    <circle cx="92" cy="132" r="16"/>
+  </g>
+  <path d="M210 196 q18 12 36 0" stroke="#36591b" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M354 196 q18 12 36 0" stroke="#36591b" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="228" cy="176" r="5" fill="#243b2a"/>
+  <circle cx="372" cy="176" r="5" fill="#243b2a"/>
+</svg>

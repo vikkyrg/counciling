@@ -1,0 +1,366 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+
+  /* ============================================================
+     "The Master Mind" green brand ramp
+     Primary green #4D7C24 · Deep green #36591B · Forest #243B2A
+     ============================================================ */
+  --color-brand-50: #f2f6ec;
+  --color-brand-100: #e5efd9;
+  --color-brand-200: #c9d8ad;
+  --color-brand-300: #a9c186;
+  --color-brand-400: #7fa158;
+  --color-brand-500: #5c8a33;
+  --color-brand-600: #4d7c24; /* Primary green */
+  --color-brand-700: #36591b; /* Deep green / hover */
+  --color-brand-800: #2e4a1a;
+  --color-brand-900: #243b2a; /* Dark forest — headings & footer */
+  --color-brand-950: #16241a;
+
+  /* ============================================================
+     Semantic tokens — preferred over raw ramp values
+     ============================================================ */
+  --color-brand: #4d7c24;        /* primary brand action */
+  --color-brand-hover: #36591b;  /* brand hover / active */
+  --color-heading: #243b2a;      /* headings */
+  --color-body: #465044;         /* body text */
+  --color-muted: #626d5e;        /* muted text */
+  --color-background: #faf9f4;   /* warm ivory page background */
+  --color-surface: #ffffff;      /* cards / white surfaces */
+  --color-surface-soft: #edf3e7; /* soft sage alternate sections */
+  --color-border: #d5dfcd;       /* subtle sage borders */
+  --color-accent: #e8d9b5;       /* muted sand — sparse decoration */
+  --color-olive: #c9d8ad;        /* pale olive — sparse decoration */
+
+  --animate-fade-up: fade-up 0.7s ease-out both;
+  --animate-fade-in: fade-in 0.9s ease-out both;
+  --animate-hero-entrance: hero-entrance 1s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-fade-slide: fade-slide 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-slide {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes hero-entrance {
+    from {
+      opacity: 0;
+      transform: scale(1.08);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+    /* Full enlarged-emergence effect on desktop, where the image is a side panel */
+    @media (min-width: 1024px) {
+      from {
+        opacity: 0;
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  main section[id],
+  main article[id] {
+    scroll-margin-top: 6rem;
+  }
+
+  body {
+    @apply bg-background font-sans text-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-heading;
+  }
+
+  /* Consistent, visible green keyboard focus across the site */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand;
+  }
+
+  ::selection {
+    @apply bg-brand-200 text-brand-900;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  @layer utilities {
+    html.has-scroll-reveal [data-reveal] {
+      opacity: 0;
+      transform: translate3d(0, 18px, 0);
+      transition:
+        opacity 550ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: var(--reveal-delay, 0ms);
+    }
+
+    html.has-scroll-reveal [data-reveal-visible] {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    html.has-mission-reveal-observer
+      [data-mission-cards]:not([data-mission-visible])
+      [data-mission-card] {
+      opacity: 0;
+      transform: scale(0.98);
+      transition:
+        opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html.has-mission-reveal-observer
+      [data-mission-cards]:not([data-mission-visible])
+      [data-mission-card="mission"] {
+      transform: translate3d(30px, 20px, 0) scale(0.98);
+    }
+
+    html.has-mission-reveal-observer
+      [data-mission-cards]:not([data-mission-visible])
+      [data-mission-card="vision"] {
+      transform: translate3d(-30px, 20px, 0) scale(0.98);
+    }
+
+    [data-mission-cards][data-mission-visible]
+      [data-mission-card="mission"] {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    [data-mission-cards][data-mission-visible]
+      [data-mission-card="vision"] {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      transition-delay: 250ms;
+    }
+
+    [data-mission-cards][data-mission-visible]
+      [data-mission-decoration] {
+      animation: mission-decoration-settle 1400ms
+        cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    [data-mission-cards][data-mission-visible]
+      [data-mission-card="vision"]
+      [data-mission-decoration] {
+      animation-delay: 250ms;
+    }
+
+    @keyframes mission-decoration-settle {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        transform: translate3d(-7px, 6px, 0);
+      }
+    }
+
+    html.has-journey-observer
+      section[data-journey-sequence]:not([data-journey-started])
+      [data-journey-step] {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0);
+    }
+
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-step] {
+      animation: journey-step-reveal 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-step="1"] {
+      animation-delay: 680ms;
+    }
+
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-step="2"] {
+      animation-delay: 1360ms;
+    }
+
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-step="3"] {
+      animation-delay: 2040ms;
+    }
+
+    html.has-journey-observer section[data-journey-sequence] [data-journey-illustration],
+    html.has-journey-observer section[data-journey-sequence] [data-journey-badge] {
+      transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+      transform: scale(0.88);
+    }
+
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-step="1"]
+      [data-journey-illustration],
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-step="1"]
+      [data-journey-badge] {
+      transition-delay: 680ms;
+    }
+
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-step="2"]
+      [data-journey-illustration],
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-step="2"]
+      [data-journey-badge] {
+      transition-delay: 1360ms;
+    }
+
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-step="3"]
+      [data-journey-illustration],
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-step="3"]
+      [data-journey-badge] {
+      transition-delay: 2040ms;
+    }
+
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-illustration],
+    section[data-journey-sequence][data-journey-started]
+      [data-journey-badge] {
+      transform: scale(1);
+    }
+
+    html.has-journey-observer section[data-journey-sequence] [data-journey-wave] {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    section[data-journey-sequence][data-journey-started] [data-journey-wave] {
+      animation: journey-wave-draw 2.45s cubic-bezier(0.4, 0, 0.2, 1) 120ms forwards;
+    }
+
+    html.has-journey-observer section[data-journey-sequence] [data-journey-dot] {
+      opacity: 0;
+      transform: scale(0.5);
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    section[data-journey-sequence][data-journey-started] [data-journey-dot] {
+      animation: journey-dot-appear 300ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    section[data-journey-sequence][data-journey-started] [data-journey-dot="1"] {
+      animation-delay: 480ms;
+    }
+
+    section[data-journey-sequence][data-journey-started] [data-journey-dot="2"] {
+      animation-delay: 1150ms;
+    }
+
+    section[data-journey-sequence][data-journey-started] [data-journey-dot="3"] {
+      animation-delay: 1840ms;
+    }
+
+    @keyframes journey-step-reveal {
+      from {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes journey-wave-draw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes journey-dot-appear {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html.has-scroll-reveal [data-reveal],
+      html.has-scroll-reveal [data-reveal-visible],
+      html.has-mission-reveal-observer [data-mission-card],
+      [data-mission-cards] [data-mission-decoration],
+      html.has-journey-observer
+        section[data-journey-sequence]
+        [data-journey-step],
+      html.has-journey-observer
+        section[data-journey-sequence]
+        [data-journey-illustration],
+      html.has-journey-observer
+        section[data-journey-sequence]
+        [data-journey-badge] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        animation: none;
+      }
+
+      html.has-journey-observer
+        section[data-journey-sequence]
+        [data-journey-wave] {
+        stroke-dasharray: none;
+        stroke-dashoffset: 0;
+        animation: none;
+      }
+
+      html.has-journey-observer
+        section[data-journey-sequence]
+        [data-journey-dot] {
+        opacity: 1;
+        transform: none;
+        animation: none;
+      }
+    }
+  }
+}
