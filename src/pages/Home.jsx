@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion, useReducedMotion } from "framer-motion";
 import Seo from "../components/Seo.jsx";
 import Button from "../components/Button.jsx";
 import Icon from "../components/Icon.jsx";
@@ -137,11 +138,127 @@ function LeafSprig({ small = false }) {
 }
 
 export default function Home() {
+  const shouldReduceMotion = useReducedMotion();
   const [playHeroEntrance, setPlayHeroEntrance] = useState(
     () => !heroEntrancePlayed
   );
   const journeyRef = useRef(null);
   const [journeyStarted, setJourneyStarted] = useState(false);
+
+  // Single unified Framer Motion timeline variants (with graceful fallback for reduced motion)
+  // No mouse coordinates, no spring shaking, perfectly stationary during mouse movement
+  const heroContentVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.15,
+        delayChildren: shouldReduceMotion ? 0 : 0.25,
+      },
+    },
+  };
+
+  // 1. Counselling Badge: Soft fade and gentle upward glide
+  const badgeVariants = {
+    hidden: {
+      opacity: 0,
+      y: shouldReduceMotion ? 0 : 12,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0.01 : 0.65,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
+  // 2. Headline: Clean line-by-line clipping mask reveals
+  const headlineLineVariants = {
+    hidden: {
+      opacity: 0,
+      y: shouldReduceMotion ? 0 : "100%",
+    },
+    visible: {
+      opacity: 1,
+      y: "0%",
+      transition: {
+        duration: shouldReduceMotion ? 0.01 : 0.85,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
+  // 3. Description: Soft fade with minimal upward entrance
+  const descriptionVariants = {
+    hidden: {
+      opacity: 0,
+      y: shouldReduceMotion ? 0 : 14,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0.01 : 0.7,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
+  // 4. Action Buttons: Refined stagger entrance
+  const buttonGroupVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.1,
+        delayChildren: shouldReduceMotion ? 0 : 0.05,
+      },
+    },
+  };
+
+  const buttonItemVariants = {
+    hidden: {
+      opacity: 0,
+      y: shouldReduceMotion ? 0 : 14,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0.01 : 0.6,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
+  // 5. Trust Indicators: Quiet fade-in at the end
+  const trustGroupVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.08,
+        delayChildren: shouldReduceMotion ? 0 : 0.08,
+      },
+    },
+  };
+
+  const trustItemVariants = {
+    hidden: {
+      opacity: 0,
+      y: shouldReduceMotion ? 0 : 10,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0.01 : 0.55,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
 
   useEffect(() => {
     if (playHeroEntrance) {
@@ -183,101 +300,231 @@ export default function Home() {
         description="Confidential, compassionate, professional counselling for whatever you're carrying. Certified counsellors, judgement-free listening, and care tailored to your life — online or in person."
       />
 
-      {/* 1. Hero — Full-Background Therapy Landscape */}
+      {/* 1. Hero Section — Responsive Architecture:
+          • Desktop / Tablet (sm+): Full-bleed therapy landscape background with horizontal gradient, text on left, woman crisp on right.
+          • Mobile (<sm): Dedicated vertical composition with clean readable content section above, followed by a dedicated portrait photograph card showcasing the woman, mountain vista, and tea table without interference. */}
       <section
         aria-labelledby="hero-title"
-        className="relative flex min-h-[calc(100svh-5rem)] items-center overflow-hidden bg-[#FAF9F4]"
+        className="relative overflow-hidden bg-[#FAF9F4] sm:flex sm:min-h-[calc(100svh-5rem)] sm:items-center"
       >
-        {/* Full-bleed therapy photograph — the single hero background */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src={heroImg}
-            alt="A peaceful person sitting comfortably by a panoramic window overlooking misty green rolling mountains with sunlit forest, tea, and indoor plants"
-            width="1440"
-            height="810"
-            className="h-full w-full object-cover object-[62%_center] sm:object-[60%_center] lg:object-[54%_center] xl:object-[50%_center]"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-          />
+        {/* =========================================================================
+            DESKTOP / TABLET BACKGROUND LAYERS (sm:block) — 100% Unchanged Desktop Design
+            ========================================================================= */}
+        <div className="hidden sm:block absolute inset-0 z-0 origin-center overflow-hidden">
+          <motion.div
+            className="h-full w-full"
+            initial={{
+              opacity: shouldReduceMotion ? 1 : 0,
+              scale: shouldReduceMotion ? 1 : 1.05,
+              filter: shouldReduceMotion ? "blur(0px)" : "blur(8px)",
+              clipPath: shouldReduceMotion ? "inset(0% 0% 0% 0%)" : "inset(0% 100% 0% 0%)",
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              filter: "blur(0px)",
+              clipPath: "inset(0% 0% 0% 0%)",
+            }}
+            transition={{
+              clipPath: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
+              filter: { duration: 1.3, ease: [0.22, 1, 0.36, 1] },
+              opacity: { duration: 1.1, ease: "easeOut" },
+              scale: { duration: 1.8, ease: [0.16, 1, 0.3, 1] },
+            }}
+          >
+            <img
+              src={heroImg}
+              alt="A peaceful person sitting comfortably by a panoramic window overlooking misty green rolling mountains with sunlit forest, tea, and indoor plants"
+              width="1440"
+              height="810"
+              className="h-full w-full object-cover sm:object-[70%_center] md:object-[64%_center] lg:object-[54%_center] xl:object-[50%_center] select-none"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
+          </motion.div>
         </div>
 
-        {/* Soft atmospheric warm ivory gradient overlay — seamlessly blends the left text area while keeping the woman, tea table, and sunlit forest crisp on the right */}
+        {/* Desktop Gradient Overlays */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-[#FAF9F4]/95 via-[#FAF9F4]/80 via-35% sm:via-[#FAF9F4]/60 sm:via-45% to-transparent to-75% lg:to-65%"
+          className="pointer-events-none absolute inset-0 z-[1] hidden sm:block bg-gradient-to-r from-[#FAF9F4]/95 via-[#FAF9F4]/80 via-35% sm:via-[#FAF9F4]/60 sm:via-45% to-transparent to-75% lg:to-65%"
         />
-
-        {/* Subtle warm sunlight tint over the window scene */}
-        <div
+        <motion.div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#FAF9F4]/40 via-transparent to-[#E8D9B5]/15 mix-blend-soft-light"
+          className="pointer-events-none absolute inset-0 z-[1] hidden sm:block bg-gradient-to-tr from-[#FAF9F4]/30 via-transparent to-[#F1E5C4]/20 mix-blend-soft-light"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.65 }}
+          transition={{ duration: 1.6, ease: "easeOut", delay: 0.3 }}
         />
 
-        {/* Foreground Content Container */}
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-          <div className="max-w-xl min-w-0 motion-safe:animate-fade-up lg:max-w-xl xl:max-w-2xl">
-            
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#E5EFD9]/90 backdrop-blur-xs px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#36591B] shadow-2xs border border-[#4D7C24]/10">
-              <Icon name="leaf" className="h-3.5 w-3.5 text-[#4D7C24]" />
-              <span>Professional counselling & therapy</span>
-            </div>
+        {/* =========================================================================
+            MAIN HERO CONTENT WRAPPER
+            ========================================================================= */}
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-4 pb-8 sm:py-16 lg:py-20">
+          <motion.div
+            className="max-w-xl min-w-0 lg:max-w-xl xl:max-w-2xl"
+            variants={heroContentVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {/* 1. Counselling Badge */}
+            <motion.div variants={badgeVariants}>
+              <div className="inline-flex max-w-full items-center gap-2 rounded-full bg-[#E5EFD9]/95 backdrop-blur-md px-3.5 py-1.5 sm:px-4 text-[10.5px] sm:text-[11px] font-extrabold uppercase tracking-wider sm:tracking-widest text-[#36591B] shadow-xs border border-[#4D7C24]/20">
+                <Icon name="leaf" className="h-3.5 w-3.5 shrink-0 text-[#4D7C24]" />
+                <span className="truncate">Professional counselling & therapy</span>
+              </div>
+            </motion.div>
 
-            {/* Headline matching exact scale, weights, colors, and line breaks */}
+            {/* 2. Main Heading: Editorial line-by-line clipping reveal */}
             <h1
               id="hero-title"
-              className="mt-6 text-4xl sm:text-5xl lg:text-[3.65rem] xl:text-[4rem] leading-[1.08] font-extrabold tracking-tight text-[#243B2A]"
+              className="mt-4 sm:mt-6 text-[32px] sm:text-5xl lg:text-[3.65rem] xl:text-[4rem] leading-[1.12] sm:leading-[1.08] font-extrabold tracking-tight text-[#243B2A]"
             >
-              A safe space to talk,
-              <br />
-              <span className="text-[#4D7C24]">heal, and grow.</span>
+              {/* Line 1: "A safe space to talk," */}
+              <span className="block overflow-hidden pb-1">
+                <motion.span
+                  variants={headlineLineVariants}
+                  className="block"
+                >
+                  A safe space to talk,
+                </motion.span>
+              </span>
+
+              {/* Line 2: "heal, and grow." in signature forest green */}
+              <span className="block overflow-hidden pt-0.5 text-[#4D7C24]">
+                <motion.span
+                  variants={headlineLineVariants}
+                  className="block"
+                >
+                  heal, and grow.
+                </motion.span>
+              </span>
             </h1>
 
-            {/* Supporting paragraph */}
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-[#465044] sm:text-lg sm:leading-relaxed font-normal">
+            {/* 3. Description: Clean, unclipped text with maximum readability */}
+            <motion.p
+              variants={descriptionVariants}
+              className="mt-3.5 sm:mt-6 max-w-lg text-[15px] sm:text-lg leading-relaxed text-[#465044] font-normal"
+            >
               Confidential, compassionate, professional counselling for whatever
               you're carrying. Certified counsellors, judgement-free listening,
               and care tailored to your life — online or in person.
-            </p>
+            </motion.p>
 
-            {/* Buttons */}
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Button
-                to="/contact"
-                size="lg"
-                className="bg-[#4D7C24] text-white shadow-md shadow-[#4D7C24]/20 hover:bg-[#36591B] font-bold px-7 py-3.5 rounded-full"
-              >
-                Book a Session
-                <Icon name="arrow-right" className="h-4 w-4" />
-              </Button>
-              <Button
-                to="/therapy"
-                variant="secondary"
-                size="lg"
-                className="bg-white/90 backdrop-blur-xs text-[#243B2A] border border-[#243B2A]/25 hover:border-[#243B2A] hover:bg-[#EDF3E7]/60 font-bold px-7 py-3.5 rounded-full shadow-2xs"
-              >
-                Explore Therapy
-              </Button>
-            </div>
+            {/* =========================================================================
+                DEDICATED MOBILE IMAGE CARD (sm:hidden)
+                Appears beneath the description on mobile phones, giving the photograph
+                its own pristine portrait stage where the woman, tea table, and sunlit
+                mountain vista are beautifully and naturally framed without being covered.
+                ========================================================================= */}
+            <motion.div
+              variants={descriptionVariants}
+              className="block sm:hidden mt-5 w-full overflow-hidden rounded-2xl border border-[#4D7C24]/15 bg-[#FAF9F4] shadow-md shadow-[#243B2A]/5"
+            >
+              <div className="relative aspect-[16/10] w-full overflow-hidden">
+                <img
+                  src={heroImg}
+                  alt="A peaceful person sitting comfortably by a panoramic window overlooking misty green rolling mountains"
+                  className="h-full w-full object-cover object-[84%_30%] select-none"
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+                {/* Subtle soft gradient highlight at image edges */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#243B2A]/15 via-transparent to-transparent"
+                />
+              </div>
+            </motion.div>
 
-            {/* Reassurance Row */}
-            <div className="mt-10 flex flex-wrap items-center gap-y-3 gap-x-6 text-xs text-[#465044] font-medium sm:gap-x-8">
-              <div className="flex items-center gap-2">
-                <Icon name="chat" className="h-4 w-4 text-[#4D7C24]" />
+            {/* 4. Action Buttons with Deliberate, Restrained Hover / Arrow Motion Only */}
+            <motion.div
+              variants={buttonGroupVariants}
+              className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4"
+            >
+              {/* Primary Action Button: "Book a Session" */}
+              <motion.div
+                variants={buttonItemVariants}
+                className="w-full sm:w-auto inline-block rounded-full"
+              >
+                <motion.div
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          y: -2,
+                          boxShadow: "0 10px 24px -4px rgba(77, 124, 36, 0.35)",
+                          transition: { duration: 0.2, ease: "easeOut" },
+                        }
+                  }
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                  className="rounded-full w-full"
+                >
+                  <Button
+                    to="/contact"
+                    size="lg"
+                    className="w-full sm:w-auto group bg-[#4D7C24] text-white shadow-md shadow-[#4D7C24]/20 hover:bg-[#36591B] font-bold px-7 py-3.5 rounded-full transition-colors duration-200"
+                  >
+                    <span>Book a Session</span>
+                    <span className="inline-flex items-center transition-transform duration-200 ease-out group-hover:translate-x-1">
+                      <Icon name="arrow-right" className="h-4 w-4" />
+                    </span>
+                  </Button>
+                </motion.div>
+              </motion.div>
+
+              {/* Secondary Action Button: "Explore Therapy" */}
+              <motion.div
+                variants={buttonItemVariants}
+                className="w-full sm:w-auto inline-block rounded-full"
+              >
+                <motion.div
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          y: -2,
+                          boxShadow: "0 8px 20px -4px rgba(36, 59, 42, 0.12)",
+                          transition: { duration: 0.2, ease: "easeOut" },
+                        }
+                  }
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                  className="rounded-full w-full"
+                >
+                  <Button
+                    to="/therapy"
+                    variant="secondary"
+                    size="lg"
+                    className="w-full sm:w-auto bg-white/95 backdrop-blur-xs text-[#243B2A] border border-[#243B2A]/25 hover:border-[#243B2A] hover:bg-[#EDF3E7]/80 font-bold px-7 py-3.5 rounded-full shadow-2xs transition-all duration-200"
+                  >
+                    Explore Therapy
+                  </Button>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+
+            {/* 5. Trust / Reassurance Row: Responsive multi-line flow on mobile with clear contrast */}
+            <motion.div
+              variants={trustGroupVariants}
+              className="mt-6 sm:mt-10 flex flex-wrap items-center gap-y-2.5 gap-x-5 text-xs text-[#465044] font-medium sm:gap-x-8"
+            >
+              <motion.div variants={trustItemVariants} className="flex items-center gap-2">
+                <Icon name="chat" className="h-4 w-4 shrink-0 text-[#4D7C24]" />
                 <span>Free initial enquiry</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Icon name="clock" className="h-4 w-4 text-[#4D7C24]" />
+              </motion.div>
+              <motion.div variants={trustItemVariants} className="flex items-center gap-2">
+                <Icon name="clock" className="h-4 w-4 shrink-0 text-[#4D7C24]" />
                 <span>Replies within 1 working day</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Icon name="shield" className="h-4 w-4 text-[#4D7C24]" />
+              </motion.div>
+              <motion.div variants={trustItemVariants} className="flex items-center gap-2">
+                <Icon name="shield" className="h-4 w-4 shrink-0 text-[#4D7C24]" />
                 <span>Fully confidential</span>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-          </div>
+          </motion.div>
         </div>
       </section>
 
