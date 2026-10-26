@@ -10,6 +10,16 @@ export const SITE = {
   hours: "Mon – Sat, 9:00 AM – 7:00 PM",
 };
 
+export function getWhatsAppUrl(message) {
+  const businessNumber = SITE.whatsapp.replace(/\D/g, "");
+  if (!businessNumber) return "";
+
+  const messageQuery = message
+    ? `?text=${encodeURIComponent(message)}`
+    : "";
+  return `https://wa.me/${businessNumber}${messageQuery}`;
+}
+
 export const STATS = [
   {
     value: 15,
@@ -252,7 +262,7 @@ export const CONTACT_CARDS = [
     title: "WhatsApp",
     value: SITE.whatsapp,
     meta: "Text us anytime",
-    href: `https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}`,
+    href: getWhatsAppUrl(),
   },
   {
     icon: "pin",

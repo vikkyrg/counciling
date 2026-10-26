@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import Icon from "./Icon.jsx";
 import Button from "./Button.jsx";
 import { DETAILED_SERVICES } from "../data/services.js";
-import { SITE } from "../data/content.js";
+import { getWhatsAppUrl, SITE } from "../data/content.js";
 
 const INITIAL = {
   fullName: "",
@@ -105,8 +105,8 @@ export default function ContactForm() {
       return;
     }
 
-    const businessNumber = SITE.whatsapp.replace(/\D/g, "");
-    if (!businessNumber) {
+    const whatsappUrl = getWhatsAppUrl();
+    if (!whatsappUrl) {
       setStatus("error");
       return;
     }
@@ -138,12 +138,12 @@ export default function ContactForm() {
       "",
       "Please let me know the next steps for booking a session.",
     ].join("\n");
-    const whatsappUrl = `https://wa.me/${businessNumber}?text=${encodeURIComponent(message)}`;
+    const enquiryUrl = getWhatsAppUrl(message);
 
     submissionInProgress.current = true;
     setStatus("opening");
     try {
-      const whatsappWindow = window.open(whatsappUrl, "_blank");
+      const whatsappWindow = window.open(enquiryUrl, "_blank");
       if (!whatsappWindow) {
         submissionInProgress.current = false;
         setStatus("error");

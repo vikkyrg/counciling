@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Icon from "./Icon.jsx";
 import logo from "../assets/logo.png";
-import { SITE } from "../data/content.js";
+import { getWhatsAppUrl, SITE } from "../data/content.js";
 import { HOW_WE_HELP } from "../data/services.js";
 
 const QUICK_LINKS = [
@@ -15,7 +15,7 @@ const SOCIALS = [
   { name: "Instagram", icon: "instagram", href: "https://instagram.com" },
   { name: "Facebook", icon: "facebook", href: "https://facebook.com" },
   { name: "LinkedIn", icon: "linkedin", href: "https://linkedin.com" },
-  { name: "WhatsApp", icon: "whatsapp", href: "https://wa.me/917618751717" },
+  { name: "WhatsApp", icon: "whatsapp", href: getWhatsAppUrl() },
 ];
 
 export default function Footer() {
@@ -223,10 +223,15 @@ export default function Footer() {
 
         {/* 6. Bottom Copyright Row */}
         <div className="mt-8 flex flex-col items-center justify-between gap-3.5 border-t border-[#2F4A38]/70 py-6 text-xs text-[#9BB197] sm:flex-row">
-          <p>© {year} Innomatrics Technologies. All Rights Reserved.</p>
-          <p className="text-center sm:text-right">
-            Made with care for mental wellbeing.
-          </p>
+          <p>© {year} The Master Mind. All Rights Reserved.</p>
+          <a
+            href="https://innomatricstech.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-center transition-colors hover:text-[#E4EFE0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C9D8AD] sm:text-right"
+          >
+            Powered by Innomatrics Tech
+          </a>
         </div>
       </div>
     </footer>
