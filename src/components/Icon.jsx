@@ -52,6 +52,26 @@ const PATHS = {
   bolt: "m13 2-9 12h7l-1 8 10-13h-7l1-7Z",
   pattern:
     "M12 3.5 14 5l2.5-.2.8 2.3 2.2 1.2-.6 2.4 1.1 2.2-1.8 1.8-.2 2.5-2.4.7-1.3 2.2-2.3-.7-2.3.7-1.3-2.2-2.4-.7-.2-2.5-1.8-1.8 1.1-2.2-.6-2.4 2.2-1.2.8-2.3L12 3.5Zm0 5.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z",
+
+  // 1. Years of Experience: Achievement medal with center star and ribbon details
+  medal:
+    "M12 15a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11Zm-1.2-6.8.4.8.9.1-.7.6.2.9-.8-.4-.8.4.2-.9-.7-.6.9-.1.4-.8ZM8.2 14.2 7 21l5-2.5 5 2.5-1.2-6.8",
+
+  // 2. Successful Therapy Sessions: Heart supported by two open caring hands
+  caringHeart:
+    "M12 4.2c-1.3-1.6-3.4-1.6-4.6-.2-1.1 1.2-1 3.2.2 4.6l4.4 4.2 4.4-4.2c1.2-1.4 1.3-3.4.2-4.6-1.2-1.4-3.3-1.4-4.6.2Zm-8.5 11c1.5-1.2 3.4-1.6 5.2-1 .9.3 2.3 1.2 3.3 1.8m8.5-.8c-1.5-1.2-3.4-1.6-5.2-1-.9.3-2.3 1.2-3.3 1.8M3 19.5c2.2.6 4.6.2 6.5-.8 1.2-.6 2.5-.2 2.5-.2m9 1c-2.2.6-4.6.2-6.5-.8-1.2-.6-2.5-.2-2.5-.2",
+
+  // 3. Life Skills Training: Detailed brain outline with spark/learning rays
+  wellnessBrain:
+    "M12 5v14M8.5 5.5a2.8 2.8 0 0 0-3.5 2.7 2.8 2.8 0 0 0-.2 4.1 3 3 0 0 0 3.7 4.7M15.5 5.5a2.8 2.8 0 0 1 3.5 2.7 2.8 2.8 0 0 1 .2 4.1 3 3 0 0 1-3.7 4.7M9 9.5a2 2 0 0 0-2 2M15 9.5a2 2 0 0 1 2 2M12 2.5v1.5M12 20v1.5M4 12H2.5M21.5 12H20M5.5 5.5l1 1M17.5 17.5l1 1M18.5 5.5l-1 1M6.5 17.5l-1 1",
+
+  // 4. Career Guidance: Briefcase with upward trending career growth arrow
+  careerGrowth:
+    "M9 6V4.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 4.5V6M4 7h16a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H4a1.5 1.5 0 0 1-1.5-1.5v-10A1.5 1.5 0 0 1 4 7Zm3 8.5 3-3 2.5 2.5 4.5-4.5m0 0h-3m3 0v3",
+
+  // 5. Community / Group Support: 3 figures together (central prominent figure with two flanking figures)
+  communitySupport:
+    "M12 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm0 2.5c-3.2 0-6 1.6-6 4v1.5h12V17.5c0-2.4-2.8-4-6-4ZM5 10a2.2 2.2 0 1 0 0-4.4A2.2 2.2 0 0 0 5 10Zm14 0a2.2 2.2 0 1 0 0-4.4A2.2 2.2 0 0 0 19 10ZM1.5 17c0-1.8 2-3 4.2-3.4.4.8 1 1.5 1.8 2H1.5v1.4ZM22.5 17c0-1.8-2-3-4.2-3.4-.4.8-1 1.5-1.8 2h6v1.4Z",
 };
 
 export default function Icon({ name, className = "h-6 w-6", label }) {

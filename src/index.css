@@ -41,6 +41,30 @@
   --animate-hero-entrance: hero-entrance 1s cubic-bezier(0.22, 1, 0.36, 1);
   --animate-fade-slide: fade-slide 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 
+  @keyframes hero-ken-burns {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.06);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes hero-ken-burns-mobile {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.04);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
   @keyframes fade-slide {
     from {
       opacity: 0;
@@ -284,6 +308,95 @@
       }
     }
 
+    /* ============================================================
+       Session Fees Pricing Cards Reveal Animation
+       Left: translateX(-100px) -> translateX(0) [starts first, 0ms]
+       Center: translateY(-100px) -> translateY(0) [staggered, 180ms]
+       Right: translateX(100px) -> translateX(0) [staggered, 360ms]
+       Mobile: adapted displacement (-36px / 36px) to prevent horizontal overflow
+       Timing: 900ms cubic-bezier(0.22, 1, 0.36, 1)
+       ============================================================ */
+    html.has-pricing-observer
+      [data-pricing-cards]:not([data-pricing-visible])
+      [data-pricing-card] {
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html.has-pricing-observer
+      [data-pricing-cards]:not([data-pricing-visible])
+      [data-pricing-card="individual"] {
+      transform: translate3d(-36px, 0, 0);
+    }
+    @media (min-width: 768px) {
+      html.has-pricing-observer
+        [data-pricing-cards]:not([data-pricing-visible])
+        [data-pricing-card="individual"] {
+        transform: translate3d(-100px, 0, 0);
+      }
+    }
+
+    html.has-pricing-observer
+      [data-pricing-cards]:not([data-pricing-visible])
+      [data-pricing-card="couples"] {
+      transform: translate3d(0, -36px, 0);
+    }
+    @media (min-width: 768px) {
+      html.has-pricing-observer
+        [data-pricing-cards]:not([data-pricing-visible])
+        [data-pricing-card="couples"] {
+        transform: translate3d(0, -100px, 0);
+      }
+    }
+
+    html.has-pricing-observer
+      [data-pricing-cards]:not([data-pricing-visible])
+      [data-pricing-card="online"] {
+      transform: translate3d(36px, 0, 0);
+    }
+    @media (min-width: 768px) {
+      html.has-pricing-observer
+        [data-pricing-cards]:not([data-pricing-visible])
+        [data-pricing-card="online"] {
+        transform: translate3d(100px, 0, 0);
+      }
+    }
+
+    [data-pricing-cards][data-pricing-visible] [data-pricing-card] {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      transition:
+        opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    [data-pricing-cards][data-pricing-visible]
+      [data-pricing-card="individual"] {
+      transition-delay: 0ms;
+    }
+
+    [data-pricing-cards][data-pricing-visible]
+      [data-pricing-card="couples"] {
+      transition-delay: 180ms;
+    }
+
+    [data-pricing-cards][data-pricing-visible]
+      [data-pricing-card="online"] {
+      transition-delay: 360ms;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      [data-pricing-cards][data-pricing-visible] [data-pricing-card]:hover {
+        transform: translate3d(0, -4px, 0);
+        transition:
+          transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 300ms ease;
+      }
+    }
+
     html.has-journey-observer
       section[data-journey-sequence]:not([data-journey-started])
       [data-journey-step] {
@@ -412,6 +525,8 @@
       html.has-scroll-reveal [data-reveal-visible],
       html.has-mission-reveal-observer [data-mission-card],
       [data-mission-cards] [data-mission-decoration],
+      html.has-pricing-observer [data-pricing-card],
+      [data-pricing-cards] [data-pricing-card],
       html.has-journey-observer
         section[data-journey-sequence]
         [data-journey-step],
@@ -573,5 +688,29 @@
 
   .cursor-dot {
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.92);
+  }
+}
+
+/* ============================================================
+   Continuous Relaxing Ken Burns Hero Animation
+   ============================================================ */
+.hero-bg-ken-burns {
+  transform-origin: center center;
+  will-change: transform;
+  animation: hero-ken-burns 18s ease-in-out infinite;
+}
+
+.hero-bg-ken-burns-mobile {
+  transform-origin: 84% 30%;
+  will-change: transform;
+  animation: hero-ken-burns-mobile 18s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-ken-burns,
+  .hero-bg-ken-burns-mobile {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto !important;
   }
 }

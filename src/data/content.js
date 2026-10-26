@@ -10,6 +10,37 @@ export const SITE = {
   hours: "Mon – Sat, 9:00 AM – 7:00 PM",
 };
 
+export const STATS = [
+  {
+    value: 15,
+    suffix: "+",
+    label: "Years of Experience",
+    subtext: "Compassionate, certified care",
+    icon: "medal",
+  },
+  {
+    value: 1510,
+    suffix: "+",
+    label: "Successful Therapy Sessions",
+    subtext: "Guided journeys of healing",
+    icon: "caringHeart",
+  },
+  {
+    value: 154,
+    suffix: "+",
+    label: "Life Skills Training",
+    subtext: "Empowering resilience & growth",
+    icon: "wellnessBrain",
+  },
+  {
+    value: 880,
+    suffix: "+",
+    label: "Career Guidance",
+    subtext: "Clarity, purpose & direction",
+    icon: "careerGrowth",
+  },
+];
+
 export const TRUST_INDICATORS = [
   {
     icon: "shield",
@@ -228,6 +259,7 @@ export const CONTACT_CARDS = [
     title: "Location",
     value: "No 12, 60ft, 1st Main Rd, Shivanagar, Rajajinagar, Bengaluru, Karnataka 560010",
     meta: "Wheelchair accessible",
+    href: "https://www.google.com/maps/place/12,+60+Feet+Rd,+Yeshwanthpur+Industrial+Suburb,+Mahalakshmi+Layout,+Bengaluru,+Karnataka+560096/@13.014287,77.5398441,1427m/data=!3m1!1e3!4m5!3m4!1s0x3bae3d743d5290e9:0x26ecf4c4bb467ea1!8m2!3d13.0140946!4d77.5440868?authuser=0&entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D",
   },
   {
     icon: "clock",

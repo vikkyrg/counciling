@@ -6,6 +6,9 @@ export const HOW_WE_HELP = [
     to: "/therapy#individual-therapy",
     description:
       "One-on-one sessions focused on your wellbeing, identity, and personal growth at your own pace.",
+    backDescription:
+      "Explore your thoughts and emotions in a safe, confidential space. Receive personalised guidance to build self-awareness, develop coping strategies, and move forward with greater confidence.",
+    backLink: "Explore service",
   },
   {
     id: "couples",
@@ -14,6 +17,9 @@ export const HOW_WE_HELP = [
     to: "/therapy#couples-therapy",
     description:
       "A neutral, supportive space to rebuild communication, trust, and emotional connection.",
+    backDescription:
+      "Strengthen communication, understand each other's perspectives, and work through relationship challenges with supportive guidance focused on trust, respect, and connection.",
+    backLink: "Explore service",
   },
   {
     id: "teens",
@@ -22,6 +28,9 @@ export const HOW_WE_HELP = [
     to: "/therapy#teen-counselling",
     description:
       "Guidance for young people navigating school pressure, emotions, relationships, and self-worth.",
+    backDescription:
+      "Support young people as they navigate academic pressure, emotions, friendships, identity, and everyday challenges in a safe and understanding environment.",
+    backLink: "Explore service",
   },
   {
     id: "career",
@@ -30,6 +39,9 @@ export const HOW_WE_HELP = [
     to: "/therapy#career-counselling",
     description:
       "Clarity around career decisions, workplace stress, transitions, and professional burnout.",
+    backDescription:
+      "Explore your strengths, interests, and career options. Get structured guidance to make informed decisions about education, professional development, and future opportunities.",
+    backLink: "Explore service",
   },
   {
     id: "stress",
@@ -38,6 +50,9 @@ export const HOW_WE_HELP = [
     to: "/therapy#stress-burnout",
     description:
       "Practical, evidence-informed strategies to manage overwhelm and recover lasting balance.",
+    backDescription:
+      "Understand stress triggers, build healthier coping habits, and explore practical strategies for restoring balance, managing pressure, and supporting your wellbeing.",
+    backLink: "Explore service",
   },
   {
     id: "online",
@@ -46,6 +61,9 @@ export const HOW_WE_HELP = [
     to: "/therapy#online-counselling",
     description:
       "Confidential video sessions from the comfort and safety of wherever you feel most at ease.",
+    backDescription:
+      "Access confidential counselling remotely from a comfortable environment. Connect with your counsellor online with greater flexibility and convenience.",
+    backLink: "Explore service",
   },
 ];
 

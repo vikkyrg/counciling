@@ -65,7 +65,9 @@ function ScrollRevealObserver() {
     const observeTarget = (element) => {
       if (
         element.hasAttribute("data-reveal") ||
-        element.closest("[data-journey-sequence], [data-mission-cards]")
+        element.closest(
+          "[data-journey-sequence], [data-mission-cards], [data-pricing-cards], [data-stats-section], [data-who-we-are]",
+        )
       ) {
         return;
       }

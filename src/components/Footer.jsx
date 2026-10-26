@@ -20,59 +20,85 @@ const SOCIALS = [
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    SITE.address,
+  )}`;
 
   return (
-    <footer className="mt-auto bg-brand-900 text-brand-100" aria-label="Site footer">
+    <footer
+      className="mt-auto border-t border-[#2F4A38]/50 bg-[#1B3024] text-[#D3DFCE]"
+      aria-label="Site footer"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
-          <div>
+        {/* Main 4-column layout */}
+        <div className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8 lg:py-16">
+          {/* 1. Brand Column */}
+          <div className="sm:col-span-2 lg:col-span-4 lg:pr-6">
             <Link
               to="/"
-              className="inline-flex items-center rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="inline-flex items-center rounded-xl transition-opacity hover:opacity-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C9D8AD]"
               aria-label={`${SITE.name} — go to homepage`}
             >
               <img
                 src={logo}
-                alt=""
+                alt={SITE.name}
                 width="2170"
                 height="725"
-                className="h-12 w-auto"
+                className="h-14 w-auto sm:h-16"
                 loading="lazy"
                 decoding="async"
               />
             </Link>
-            <p className="mt-4 text-sm leading-relaxed text-brand-200">
-              A safe space to talk, heal, and grow. Confidential,
-              compassionate, professional counselling for individuals, couples,
-              teens, and families — online and in person.
+
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-[#B7C7B3]">
+              {SITE.tagline} Confidential, compassionate, professional
+              counselling for individuals, couples, teens, and families — online
+              and in person.
             </p>
-            <ul className="mt-5 flex gap-2">
-              {SOCIALS.map((s) => (
-                <li key={s.name}>
-                  <a
-                    href={s.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`${SITE.name} on ${s.name} (opens in new tab)`}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-brand-100 transition hover:bg-white/20 hover:text-white"
-                  >
-                    <Icon name={s.icon} className="h-5 w-5" />
-                  </a>
-                </li>
-              ))}
-            </ul>
+
+            <div className="mt-6">
+              <span className="sr-only">Connect with us on social media</span>
+              <ul className="flex flex-wrap items-center gap-2.5">
+                {SOCIALS.map((s) => (
+                  <li key={s.name}>
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${SITE.name} on ${s.name} (opens in new tab)`}
+                      className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#3E5C46]/60 bg-[#253E2F]/80 text-[#C9D8AD] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#6F955A]/80 hover:bg-[#32523E] hover:text-[#FAFAF7] hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C9D8AD] motion-reduce:transition-none motion-reduce:hover:transform-none"
+                    >
+                      <Icon
+                        name={s.icon}
+                        className="h-4 w-4 transition-transform duration-200 group-hover:scale-110 motion-reduce:transform-none"
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <nav aria-label="Footer quick links">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-white">
-              Quick Links
-            </h2>
-            <ul className="mt-4 space-y-2.5 text-sm">
+          {/* 2. Quick Links Column */}
+          <nav
+            aria-label="Footer quick links"
+            className="sm:col-span-1 lg:col-span-2 lg:pl-2"
+          >
+            <div className="group">
+              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-[#FAFAF7]">
+                Quick Links
+              </h2>
+              <span
+                aria-hidden="true"
+                className="mt-2 block h-[2px] w-7 rounded-full bg-[#7FA158]"
+              />
+            </div>
+            <ul className="mt-5 space-y-3 text-sm">
               {QUICK_LINKS.map((l) => (
                 <li key={l.to}>
                   <Link
                     to={l.to}
-                    className="text-brand-200 transition hover:text-white hover:underline"
+                    className="inline-block text-[#B7C7B3] transition-colors duration-150 hover:text-[#E4EFE0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C9D8AD]"
                   >
                     {l.label}
                   </Link>
@@ -81,16 +107,26 @@ export default function Footer() {
             </ul>
           </nav>
 
-          <nav aria-label="Footer services">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-white">
-              Services
-            </h2>
-            <ul className="mt-4 space-y-2.5 text-sm">
+          {/* 3. Services Column */}
+          <nav
+            aria-label="Footer services"
+            className="sm:col-span-1 lg:col-span-3 lg:pl-2"
+          >
+            <div className="group">
+              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-[#FAFAF7]">
+                Services
+              </h2>
+              <span
+                aria-hidden="true"
+                className="mt-2 block h-[2px] w-7 rounded-full bg-[#7FA158]"
+              />
+            </div>
+            <ul className="mt-5 space-y-3 text-sm">
               {HOW_WE_HELP.slice(0, 5).map((s) => (
                 <li key={s.id}>
                   <Link
                     to="/therapy"
-                    className="text-brand-200 transition hover:text-white hover:underline"
+                    className="inline-block text-[#B7C7B3] transition-colors duration-150 hover:text-[#E4EFE0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C9D8AD]"
                   >
                     {s.title}
                   </Link>
@@ -99,57 +135,98 @@ export default function Footer() {
             </ul>
           </nav>
 
-          <div>
-            <h2 className="text-sm font-bold uppercase tracking-widest text-white">
-              Get in Touch
-            </h2>
-            <ul className="mt-4 space-y-3 text-sm text-brand-200">
-              <li className="flex items-start gap-2.5">
-                <Icon name="mail" className="mt-0.5 h-4 w-4 shrink-0" />
+          {/* 4. Get in Touch Column */}
+          <div className="sm:col-span-2 lg:col-span-3">
+            <div>
+              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-[#FAFAF7]">
+                Get in Touch
+              </h2>
+              <span
+                aria-hidden="true"
+                className="mt-2 block h-[2px] w-7 rounded-full bg-[#7FA158]"
+              />
+            </div>
+
+            <ul className="mt-5 space-y-3.5 text-sm text-[#B7C7B3]">
+              <li>
                 <a
                   href={`mailto:${SITE.email}`}
-                  className="break-all hover:text-white hover:underline"
+                  className="group flex items-start gap-3 transition-colors duration-150 hover:text-[#E4EFE0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C9D8AD]"
                 >
-                  {SITE.email}
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#253E2F] text-[#C9D8AD] transition-colors group-hover:bg-[#32523E] group-hover:text-white">
+                    <Icon name="mail" className="h-4 w-4" />
+                  </span>
+                  <span className="pt-1 break-all">{SITE.email}</span>
                 </a>
               </li>
-              <li className="flex items-start gap-2.5">
-                <Icon name="phone" className="mt-0.5 h-4 w-4 shrink-0" />
+
+              <li>
                 <a
                   href={`tel:${SITE.phone.replace(/[^\d+]/g, "")}`}
-                  className="hover:text-white hover:underline"
+                  className="group flex items-start gap-3 transition-colors duration-150 hover:text-[#E4EFE0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C9D8AD]"
                 >
-                  {SITE.phone}
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#253E2F] text-[#C9D8AD] transition-colors group-hover:bg-[#32523E] group-hover:text-white">
+                    <Icon name="phone" className="h-4 w-4" />
+                  </span>
+                  <span className="pt-1">{SITE.phone}</span>
                 </a>
               </li>
-              <li className="flex items-start gap-2.5">
-                <Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0" />
-                <span>{SITE.address}</span>
+
+              <li>
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-start gap-3 transition-colors duration-150 hover:text-[#E4EFE0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C9D8AD]"
+                  title="View location on Google Maps"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#253E2F] text-[#C9D8AD] transition-colors group-hover:bg-[#32523E] group-hover:text-white">
+                    <Icon name="pin" className="h-4 w-4" />
+                  </span>
+                  <span className="pt-1 leading-snug">{SITE.address}</span>
+                </a>
               </li>
-              <li className="flex items-start gap-2.5">
-                <Icon name="clock" className="mt-0.5 h-4 w-4 shrink-0" />
-                <span>{SITE.hours}</span>
+
+              <li className="flex items-start gap-3">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#253E2F] text-[#C9D8AD]">
+                  <Icon name="clock" className="h-4 w-4" />
+                </span>
+                <span className="pt-1 leading-snug">{SITE.hours}</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div
+        {/* 5. Crisis Support Banner */}
+        <aside
           role="note"
-          className="rounded-2xl border border-amber-300/40 bg-amber-400/10 px-5 py-4 text-sm leading-relaxed text-amber-100"
+          aria-label="Crisis support notice"
+          className="relative my-2 overflow-hidden rounded-2xl border border-[#3E5C46]/70 bg-[#22392B]/90 px-5 py-4 sm:px-6 sm:py-4.5"
         >
-          <strong className="font-bold text-amber-50">Crisis support: </strong>
-          If you are in immediate danger or experiencing a mental-health
-          emergency, contact local emergency services or a crisis helpline
-          immediately. This website is not monitored for emergencies.
-        </div>
+          <div className="flex items-start gap-3.5 sm:items-center">
+            <span
+              aria-hidden="true"
+              className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#7FA158]/20 text-[#C9D8AD] sm:mt-0"
+            >
+              <Icon name="alert" className="h-4 w-4" />
+            </span>
+            <p className="text-xs leading-relaxed text-[#D8E4D3] sm:text-sm">
+              <strong className="font-semibold text-[#FAFAF7]">
+                Crisis support:{" "}
+              </strong>
+              If you are in immediate danger or experiencing a mental-health
+              emergency, contact local emergency services or a crisis helpline
+              immediately. This website is not monitored for emergencies.
+            </p>
+          </div>
+        </aside>
 
-        <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-white/10 py-6 text-xs text-brand-300 sm:flex-row">
-          <p>
-            © {year} {SITE.name}. All rights reserved. Demo content
-            and placeholder details.
+        {/* 6. Bottom Copyright Row */}
+        <div className="mt-8 flex flex-col items-center justify-between gap-3.5 border-t border-[#2F4A38]/70 py-6 text-xs text-[#9BB197] sm:flex-row">
+          <p>© {year} Innomatrics Technologies. All Rights Reserved.</p>
+          <p className="text-center sm:text-right">
+            Made with care for mental wellbeing.
           </p>
-          <p>Made with care for mental wellbeing.</p>
         </div>
       </div>
     </footer>

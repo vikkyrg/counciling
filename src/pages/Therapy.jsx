@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import Seo from "../components/Seo.jsx";
 import SectionHeading from "../components/SectionHeading.jsx";
 import ServiceDetailCard from "../components/ServiceDetailCard.jsx";
@@ -31,6 +32,36 @@ const THERAPY_ISSUE_ICONS = {
 };
 
 export default function Therapy() {
+  const pricingCardsRef = useRef(null);
+  const [pricingCardsVisible, setPricingCardsVisible] = useState(false);
+
+  useEffect(() => {
+    const cards = pricingCardsRef.current;
+    if (
+      !cards ||
+      !("IntersectionObserver" in window) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setPricingCardsVisible(true);
+      return undefined;
+    }
+
+    document.documentElement.classList.add("has-pricing-observer");
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setPricingCardsVisible(true);
+        observer.disconnect();
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
+    );
+    observer.observe(cards);
+
+    return () => {
+      observer.disconnect();
+      document.documentElement.classList.remove("has-pricing-observer");
+    };
+  }, []);
   return (
     <>
       <Seo
@@ -322,17 +353,25 @@ export default function Therapy() {
           title="Session fees at a glance"
           description="These are placeholder rates so you can plan ahead. Final pricing and availability are always confirmed during booking."
         />
-        <div className="mt-10 grid items-stretch gap-5 md:grid-cols-3">
-          {PRICING.map((tier, index) => (
-            <article
-              key={tier.name}
-              className={`flex flex-col rounded-[22px] border p-7 shadow-[0_5px_18px_rgba(32,59,43,0.05)] transition-transform duration-300 hover:-translate-y-1 motion-reduce:transition-none sm:p-8 ${
-                tier.featured
-                  ? "border-[#203B2B] bg-[#203B2B] text-white shadow-[0_12px_26px_rgba(32,59,43,0.16)]"
-                  : "border-[#DDE8D3] bg-white"
-              }`}
-              style={{ animationDelay: `${index * 90}ms` }}
-            >
+        <div
+          ref={pricingCardsRef}
+          data-pricing-cards
+          {...(pricingCardsVisible ? { "data-pricing-visible": "" } : {})}
+          className="mt-10 grid items-stretch gap-5 md:grid-cols-3"
+        >
+          {PRICING.map((tier, index) => {
+            const cardKey =
+              index === 0 ? "individual" : index === 1 ? "couples" : "online";
+            return (
+              <article
+                key={tier.name}
+                data-pricing-card={cardKey}
+                className={`flex flex-col rounded-[22px] border p-7 shadow-[0_5px_18px_rgba(32,59,43,0.05)] transition-transform duration-300 hover:-translate-y-1 motion-reduce:transition-none sm:p-8 ${
+                  tier.featured
+                    ? "border-[#203B2B] bg-[#203B2B] text-white shadow-[0_12px_26px_rgba(32,59,43,0.16)]"
+                    : "border-[#DDE8D3] bg-white"
+                }`}
+              >
               <h3
                 className={`text-sm font-bold uppercase tracking-wider ${
                   tier.featured ? "text-[#EAF1E3]" : "text-[#36591B]"
@@ -368,7 +407,8 @@ export default function Therapy() {
                 </Button>
               </div>
             </article>
-          ))}
+          );
+        })}
         </div>
       </section>
 

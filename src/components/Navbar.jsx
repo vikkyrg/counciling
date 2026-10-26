@@ -70,7 +70,7 @@ export default function Navbar() {
       </aside>
       <nav
         aria-label="Main navigation"
-        className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"
+        className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"
       >
         <Link
           to="/"
@@ -82,7 +82,7 @@ export default function Navbar() {
             alt=""
             width="2170"
             height="725"
-            className="h-11 w-auto sm:h-12 lg:h-14"
+            className="h-10 w-auto sm:h-12 lg:h-14"
           />
         </Link>
 

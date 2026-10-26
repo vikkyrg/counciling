@@ -141,17 +141,29 @@ export default function ContactUs() {
               ))}
             </ul>
 
-            {/* 4. Map placeholder */}
-            <div
-              role="img"
-              aria-label="Map placeholder showing the location of The Master Mind at No 12, 60ft, 1st Main Road, Shivanagar, Rajajinagar, Bengaluru, Karnataka 560010"
-              className="mt-4 flex h-40 flex-col items-center justify-center gap-2 rounded-[22px] border border-dashed border-[#BFD1B2] bg-[#F0F5E9]/90 text-[#4B7F24] sm:h-44"
-            >
-              <Icon name="pin" className="h-9 w-9" />
-              <p className="text-sm font-semibold text-[#36591B]">Map placeholder</p>
-              <p className="text-xs text-[#687568]">
-                An interactive map will appear here
-              </p>
+            {/* 4. Interactive Google Map */}
+            <div className="mt-5 overflow-hidden rounded-[22px] border border-[#DCE7D4] bg-white p-3 shadow-[0_4px_16px_rgba(32,59,43,0.06)]">
+              <div className="relative h-64 w-full overflow-hidden rounded-[16px] sm:h-72">
+                <iframe
+                  title="The Master Mind Location Map"
+                  src="https://maps.google.com/maps?q=13.0140946,77.5440868&hl=en&z=16&output=embed"
+                  className="h-full w-full border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
+              <div className="mt-3 flex items-center justify-between px-1 text-xs text-[#596458]">
+                <a
+                  href="https://www.google.com/maps/place/12,+60+Feet+Rd,+Yeshwanthpur+Industrial+Suburb,+Mahalakshmi+Layout,+Bengaluru,+Karnataka+560096/@13.014287,77.5398441,1427m/data=!3m1!1e3!4m5!3m4!1s0x3bae3d743d5290e9:0x26ecf4c4bb467ea1!8m2!3d13.0140946!4d77.5440868?authuser=0&entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 font-semibold text-[#4B7F24] transition-colors hover:text-[#36591B] hover:underline"
+                >
+                  View larger map
+                  <Icon name="arrow-right" className="h-3 w-3" />
+                </a>
+              </div>
             </div>
           </div>
         </div>

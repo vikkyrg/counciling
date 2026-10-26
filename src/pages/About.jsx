@@ -215,6 +215,7 @@ export default function About() {
 
       {/* 5. Our approach */}
       <section
+        id="our-approach"
         aria-labelledby="approach-title"
         className="relative isolate overflow-hidden bg-[#F3F6EE] py-16 sm:py-20 lg:py-24"
       >

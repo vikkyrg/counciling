@@ -11,12 +11,15 @@ import FAQAccordion from "../components/FAQAccordion.jsx";
 import CTASection from "../components/CTASection.jsx";
 import { HOW_WE_HELP, CONCERNS } from "../data/services.js";
 import {
+  STATS,
   TRUST_INDICATORS,
   WHY_CHOOSE_US,
   HOW_IT_WORKS,
 } from "../data/content.js";
 import { HOME_FAQS } from "../data/faqs.js";
 import heroImg from "../assets/hero-flowing.png";
+import mobileHeroImg from "../assets/mobile.png";
+import whoWeAreImg from "../assets/who-we-are-session.jpg";
 
 // Ensures the hero image entrance animation plays only once per page session,
 // even when navigating back to the home route.
@@ -137,11 +140,59 @@ function LeafSprig({ small = false }) {
   );
 }
 
+function AnimatedCounter({ end, duration = 2000, isVisible, shouldReduceMotion }) {
+  const [displayValue, setDisplayValue] = useState(() => (shouldReduceMotion ? end : 0));
+  const startTimeRef = useRef(null);
+  const frameRef = useRef(null);
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      setDisplayValue(end);
+      return undefined;
+    }
+
+    if (!isVisible) {
+      return undefined;
+    }
+
+    // EaseOutExpo: extremely smooth deceleration giving a luxury, natural feel
+    const easeOutExpo = (x) => (x === 1 ? 1 : 1 - Math.pow(2, -10 * x));
+
+    const step = (timestamp) => {
+      if (!startTimeRef.current) startTimeRef.current = timestamp;
+      const elapsed = timestamp - startTimeRef.current;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeOutExpo(progress);
+
+      const current = Math.round(easedProgress * end);
+      setDisplayValue(current);
+
+      if (progress < 1) {
+        frameRef.current = requestAnimationFrame(step);
+      } else {
+        setDisplayValue(end);
+      }
+    };
+
+    frameRef.current = requestAnimationFrame(step);
+
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, [end, duration, isVisible, shouldReduceMotion]);
+
+  return <>{displayValue.toLocaleString()}</>;
+}
+
 export default function Home() {
   const shouldReduceMotion = useReducedMotion();
   const [playHeroEntrance, setPlayHeroEntrance] = useState(
     () => !heroEntrancePlayed
   );
+  const statsRef = useRef(null);
+  const [statsStarted, setStatsStarted] = useState(false);
+  const whoWeAreRef = useRef(null);
+  const [whoWeAreStarted, setWhoWeAreStarted] = useState(false);
   const journeyRef = useRef(null);
   const [journeyStarted, setJourneyStarted] = useState(false);
 
@@ -267,6 +318,58 @@ export default function Home() {
   }, [playHeroEntrance]);
 
   useEffect(() => {
+    const statsEl = statsRef.current;
+    if (
+      !statsEl ||
+      !("IntersectionObserver" in window) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setStatsStarted(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setStatsStarted(true);
+        observer.disconnect();
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -30px 0px" },
+    );
+    observer.observe(statsEl);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const el = whoWeAreRef.current;
+    if (
+      !el ||
+      !("IntersectionObserver" in window) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setWhoWeAreStarted(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setWhoWeAreStarted(true);
+        observer.disconnect();
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+    );
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
     const section = journeyRef.current;
     if (
       !section ||
@@ -305,39 +408,42 @@ export default function Home() {
           • Mobile (<sm): Dedicated vertical composition with clean readable content section above, followed by a dedicated portrait photograph card showcasing the woman, mountain vista, and tea table without interference. */}
       <section
         aria-labelledby="hero-title"
-        className="relative overflow-hidden bg-[#FAF9F4] sm:flex sm:min-h-[calc(100svh-5rem)] sm:items-center"
+        className="relative overflow-hidden bg-[#FAF9F4] flex flex-col justify-between min-h-[calc(100vh-3.5rem)] min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100vh-5rem)] sm:min-h-[calc(100svh-5rem)] sm:flex-row sm:items-center"
       >
         {/* =========================================================================
-            DESKTOP / TABLET BACKGROUND LAYERS (sm:block) — 100% Unchanged Desktop Design
+            BACKGROUND LAYERS — Full-bleed on mobile and desktop
             ========================================================================= */}
-        <div className="hidden sm:block absolute inset-0 z-0 origin-center overflow-hidden">
+        <div className="absolute inset-0 z-0 origin-center overflow-hidden">
           <motion.div
             className="h-full w-full"
             initial={{
               opacity: shouldReduceMotion ? 1 : 0,
-              scale: shouldReduceMotion ? 1 : 1.05,
-              filter: shouldReduceMotion ? "blur(0px)" : "blur(8px)",
-              clipPath: shouldReduceMotion ? "inset(0% 0% 0% 0%)" : "inset(0% 100% 0% 0%)",
             }}
             animate={{
               opacity: 1,
-              scale: 1,
-              filter: "blur(0px)",
-              clipPath: "inset(0% 0% 0% 0%)",
             }}
             transition={{
-              clipPath: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
-              filter: { duration: 1.3, ease: [0.22, 1, 0.36, 1] },
-              opacity: { duration: 1.1, ease: "easeOut" },
-              scale: { duration: 1.8, ease: [0.16, 1, 0.3, 1] },
+              opacity: { duration: shouldReduceMotion ? 0.01 : 0.9, ease: "easeOut" },
             }}
           >
+            {/* Desktop Background */}
             <img
               src={heroImg}
-              alt="A peaceful person sitting comfortably by a panoramic window overlooking misty green rolling mountains with sunlit forest, tea, and indoor plants"
+              alt=""
               width="1440"
               height="810"
-              className="h-full w-full object-cover sm:object-[70%_center] md:object-[64%_center] lg:object-[54%_center] xl:object-[50%_center] select-none"
+              className="hidden sm:block h-full w-full object-cover sm:object-[70%_center] md:object-[64%_center] lg:object-[54%_center] xl:object-[50%_center] select-none hero-bg-ken-burns"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
+            {/* Mobile Dedicated Portrait Background */}
+            <img
+              src={mobileHeroImg}
+              alt="A peaceful person sitting comfortably by a panoramic window overlooking misty green rolling mountains with sunlit forest, tea, and indoor plants"
+              width="720"
+              height="1280"
+              className="block sm:hidden h-full w-full object-cover object-[80%_25%] select-none hero-bg-ken-burns-mobile"
               loading="eager"
               fetchPriority="high"
               decoding="async"
@@ -345,11 +451,18 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Desktop Gradient Overlays */}
+        {/* Soft Cream-to-transparent overlays — Desktop & Mobile */}
+        {/* Desktop horizontal gradient overlay */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-[1] hidden sm:block bg-gradient-to-r from-[#FAF9F4]/95 via-[#FAF9F4]/80 via-35% sm:via-[#FAF9F4]/60 sm:via-45% to-transparent to-75% lg:to-65%"
         />
+        {/* Mobile vertical gradient overlay: subtle transparent cream only behind top text so woman, face, hair, and landscape remain completely clear and vibrant */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-[1] block sm:hidden bg-gradient-to-b from-[#FAF9F4]/85 via-[#FAF9F4]/40 via-35% to-transparent to-55%"
+        />
+
         <motion.div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-[1] hidden sm:block bg-gradient-to-tr from-[#FAF9F4]/30 via-transparent to-[#F1E5C4]/20 mix-blend-soft-light"
@@ -361,89 +474,77 @@ export default function Home() {
         {/* =========================================================================
             MAIN HERO CONTENT WRAPPER
             ========================================================================= */}
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-4 pb-8 sm:py-16 lg:py-20">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-5 pb-7 sm:py-16 lg:py-20 flex-1 flex flex-col justify-between">
           <motion.div
-            className="max-w-xl min-w-0 lg:max-w-xl xl:max-w-2xl"
+            className="max-w-xl min-w-0 lg:max-w-xl xl:max-w-2xl flex-1 flex flex-col justify-between"
             variants={heroContentVariants}
             initial="hidden"
             animate="visible"
           >
-            {/* 1. Counselling Badge */}
-            <motion.div variants={badgeVariants}>
-              <div className="inline-flex max-w-full items-center gap-2 rounded-full bg-[#E5EFD9]/95 backdrop-blur-md px-3.5 py-1.5 sm:px-4 text-[10.5px] sm:text-[11px] font-extrabold uppercase tracking-wider sm:tracking-widest text-[#36591B] shadow-xs border border-[#4D7C24]/20">
-                <Icon name="leaf" className="h-3.5 w-3.5 shrink-0 text-[#4D7C24]" />
-                <span className="truncate">Professional counselling & therapy</span>
-              </div>
-            </motion.div>
+            {/* Top content group */}
+            <div>
+              {/* 1. Counselling Badge */}
+              <motion.div variants={badgeVariants}>
+                <div className="inline-flex max-w-full items-center gap-2 rounded-full bg-[#E2EDD5]/90 backdrop-blur-md px-3.5 py-1.5 sm:px-4 text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-wider text-[#2D4D1B] shadow-2xs border border-[#4D7C24]/15">
+                  <Icon name="leaf" className="h-3.5 w-3.5 shrink-0 text-[#4D7C24]" />
+                  <span className="truncate">PROFESSIONAL COUNSELLING &amp; THERAPY</span>
+                </div>
+              </motion.div>
 
-            {/* 2. Main Heading: Editorial line-by-line clipping reveal */}
-            <h1
-              id="hero-title"
-              className="mt-4 sm:mt-6 text-[32px] sm:text-5xl lg:text-[3.65rem] xl:text-[4rem] leading-[1.12] sm:leading-[1.08] font-extrabold tracking-tight text-[#243B2A]"
-            >
-              {/* Line 1: "A safe space to talk," */}
-              <span className="block overflow-hidden pb-1">
-                <motion.span
-                  variants={headlineLineVariants}
-                  className="block"
-                >
-                  A safe space to talk,
-                </motion.span>
-              </span>
+              {/* 2. Main Heading: Editorial line-by-line clipping reveal */}
+              <h1
+                id="hero-title"
+                className="mt-3.5 sm:mt-6 text-[35px] sm:text-5xl lg:text-[3.65rem] xl:text-[4rem] leading-[1.08] sm:leading-[1.08] font-extrabold tracking-tight text-[#162E20]"
+              >
+                {/* Line 1: "A safe space to talk," on desktop / "A safe space to" on mobile */}
+                <span className="block overflow-hidden pb-0.5">
+                  <motion.span
+                    variants={headlineLineVariants}
+                    className="block"
+                  >
+                    A safe space to<span className="hidden sm:inline"> talk,</span>
+                  </motion.span>
+                </span>
 
-              {/* Line 2: "heal, and grow." in signature forest green */}
-              <span className="block overflow-hidden pt-0.5 text-[#4D7C24]">
-                <motion.span
-                  variants={headlineLineVariants}
-                  className="block"
-                >
-                  heal, and grow.
-                </motion.span>
-              </span>
-            </h1>
+                {/* Line 2 on Mobile: "talk," */}
+                <span className="block overflow-hidden pb-0.5 sm:hidden">
+                  <motion.span
+                    variants={headlineLineVariants}
+                    className="block"
+                  >
+                    talk,
+                  </motion.span>
+                </span>
 
-            {/* 3. Description: Clean, unclipped text with maximum readability */}
-            <motion.p
-              variants={descriptionVariants}
-              className="mt-3.5 sm:mt-6 max-w-lg text-[15px] sm:text-lg leading-relaxed text-[#465044] font-normal"
-            >
-              Confidential, compassionate, professional counselling for whatever
-              you're carrying. Certified counsellors, judgement-free listening,
-              and care tailored to your life — online or in person.
-            </motion.p>
+                {/* Line 2 on Desktop / Line 3 on Mobile: "heal, and grow." in botanical green */}
+                <span className="block overflow-hidden pt-0.5 text-[#3D7A28]">
+                  <motion.span
+                    variants={headlineLineVariants}
+                    className="block"
+                  >
+                    heal, and grow.
+                  </motion.span>
+                </span>
+              </h1>
 
-            {/* =========================================================================
-                DEDICATED MOBILE IMAGE CARD (sm:hidden)
-                Appears beneath the description on mobile phones, giving the photograph
-                its own pristine portrait stage where the woman, tea table, and sunlit
-                mountain vista are beautifully and naturally framed without being covered.
-                ========================================================================= */}
-            <motion.div
-              variants={descriptionVariants}
-              className="block sm:hidden mt-5 w-full overflow-hidden rounded-2xl border border-[#4D7C24]/15 bg-[#FAF9F4] shadow-md shadow-[#243B2A]/5"
-            >
-              <div className="relative aspect-[16/10] w-full overflow-hidden">
-                <img
-                  src={heroImg}
-                  alt="A peaceful person sitting comfortably by a panoramic window overlooking misty green rolling mountains"
-                  className="h-full w-full object-cover object-[84%_30%] select-none"
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
-                {/* Subtle soft gradient highlight at image edges */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#243B2A]/15 via-transparent to-transparent"
-                />
-              </div>
-            </motion.div>
+              {/* 3. Description: Clean, unclipped text with maximum readability */}
+              <motion.p
+                variants={descriptionVariants}
+                className="mt-3 sm:mt-6 max-w-lg text-[14.5px] sm:text-lg leading-[1.5] text-[#3A453A] font-medium"
+              >
+                Confidential, compassionate, professional counselling for whatever
+                you&apos;re carrying. Certified counsellors, judgement-free listening,
+                and care tailored to your life — online or in person.
+              </motion.p>
+            </div>
 
-            {/* 4. Action Buttons with Deliberate, Restrained Hover / Arrow Motion Only */}
-            <motion.div
-              variants={buttonGroupVariants}
-              className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4"
-            >
+            {/* Bottom actions & indicators group */}
+            <div className="pt-6 sm:pt-0">
+              {/* 4. Action Buttons with Deliberate, Restrained Hover / Arrow Motion Only */}
+              <motion.div
+                variants={buttonGroupVariants}
+                className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4"
+              >
               {/* Primary Action Button: "Book a Session" */}
               <motion.div
                 variants={buttonItemVariants}
@@ -455,7 +556,7 @@ export default function Home() {
                       ? {}
                       : {
                           y: -2,
-                          boxShadow: "0 10px 24px -4px rgba(77, 124, 36, 0.35)",
+                          boxShadow: "0 10px 24px -4px rgba(61, 122, 40, 0.35)",
                           transition: { duration: 0.2, ease: "easeOut" },
                         }
                   }
@@ -465,7 +566,7 @@ export default function Home() {
                   <Button
                     to="/contact"
                     size="lg"
-                    className="w-full sm:w-auto group bg-[#4D7C24] text-white shadow-md shadow-[#4D7C24]/20 hover:bg-[#36591B] font-bold px-7 py-3.5 rounded-full transition-colors duration-200"
+                    className="w-full sm:w-auto group justify-center bg-[#467A26] hover:bg-[#38641E] text-white shadow-md shadow-[#467A26]/20 font-bold px-7 py-3.5 rounded-full transition-colors duration-200"
                   >
                     <span>Book a Session</span>
                     <span className="inline-flex items-center transition-transform duration-200 ease-out group-hover:translate-x-1">
@@ -497,7 +598,7 @@ export default function Home() {
                     to="/therapy"
                     variant="secondary"
                     size="lg"
-                    className="w-full sm:w-auto bg-white/95 backdrop-blur-xs text-[#243B2A] border border-[#243B2A]/25 hover:border-[#243B2A] hover:bg-[#EDF3E7]/80 font-bold px-7 py-3.5 rounded-full shadow-2xs transition-all duration-200"
+                    className="w-full sm:w-auto justify-center bg-white/95 backdrop-blur-xs text-[#22402A] border border-[#22402A]/25 hover:border-[#22402A] hover:bg-[#EDF3E7]/80 font-bold px-7 py-3.5 rounded-full shadow-2xs transition-all duration-200"
                   >
                     Explore Therapy
                   </Button>
@@ -505,53 +606,325 @@ export default function Home() {
               </motion.div>
             </motion.div>
 
-            {/* 5. Trust / Reassurance Row: Responsive multi-line flow on mobile with clear contrast */}
+            {/* 5. Trust / Reassurance Row: Matching reference pill card layout on mobile with subtle translucent backing */}
             <motion.div
               variants={trustGroupVariants}
-              className="mt-6 sm:mt-10 flex flex-wrap items-center gap-y-2.5 gap-x-5 text-xs text-[#465044] font-medium sm:gap-x-8"
+              className="mt-4 sm:mt-10 grid grid-cols-3 divide-x divide-gray-200/60 sm:divide-x-0 sm:flex sm:flex-wrap items-center sm:gap-x-8 text-[11px] sm:text-xs text-[#465044] font-medium bg-white/70 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none rounded-2xl py-2 px-1 sm:p-0 border border-white/50 sm:border-0 shadow-2xs sm:shadow-none"
             >
-              <motion.div variants={trustItemVariants} className="flex items-center gap-2">
-                <Icon name="chat" className="h-4 w-4 shrink-0 text-[#4D7C24]" />
-                <span>Free initial enquiry</span>
+              <motion.div variants={trustItemVariants} className="flex items-center justify-center sm:justify-start gap-1.5 px-1 sm:px-0">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#EBF3E3] text-[#3D7A28]">
+                  <Icon name="chat" className="h-3.5 w-3.5" />
+                </span>
+                <span className="leading-tight text-center sm:text-left font-semibold text-[#30382E]">Free initial enquiry</span>
               </motion.div>
-              <motion.div variants={trustItemVariants} className="flex items-center gap-2">
-                <Icon name="clock" className="h-4 w-4 shrink-0 text-[#4D7C24]" />
-                <span>Replies within 1 working day</span>
+              <motion.div variants={trustItemVariants} className="flex items-center justify-center sm:justify-start gap-1.5 px-1 sm:px-0">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#EBF3E3] text-[#3D7A28]">
+                  <Icon name="clock" className="h-3.5 w-3.5" />
+                </span>
+                <span className="leading-tight text-center sm:text-left font-semibold text-[#30382E]">Replies within 1 working day</span>
               </motion.div>
-              <motion.div variants={trustItemVariants} className="flex items-center gap-2">
-                <Icon name="shield" className="h-4 w-4 shrink-0 text-[#4D7C24]" />
-                <span>Fully confidential</span>
+              <motion.div variants={trustItemVariants} className="flex items-center justify-center sm:justify-start gap-1.5 px-1 sm:px-0">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#EBF3E3] text-[#3D7A28]">
+                  <Icon name="shield" className="h-3.5 w-3.5" />
+                </span>
+                <span className="leading-tight text-center sm:text-left font-semibold text-[#30382E]">Fully confidential</span>
               </motion.div>
             </motion.div>
+          </div>
 
           </motion.div>
         </div>
       </section>
 
-      {/* 2. Trust indicators */}
+      {/* 2. Premium Animated Statistics Section */}
       <section
-        aria-labelledby="trust-title"
-        className="border-y border-brand-100 bg-white/70"
+        ref={statsRef}
+        data-stats-section
+        aria-labelledby="stats-title"
+        className="relative z-10 border-y border-[#243B2A]/10 bg-[#FAF9F4] py-8 sm:py-10 lg:py-12"
       >
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <h2 id="trust-title" className="sr-only">
-            Why clients can trust us
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 id="stats-title" className="sr-only">
+            Our Journey &amp; Clinical Impact
           </h2>
-          <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {TRUST_INDICATORS.map((item) => (
-              <li key={item.title} className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
-                  <Icon name={item.icon} className="h-6 w-6" />
-                </span>
-                <div>
-                  <h3 className="text-sm font-bold text-brand-900">{item.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-muted">
-                    {item.text}
-                  </p>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-8 sm:gap-y-10 lg:gap-y-0 lg:divide-x lg:divide-[#243B2A]/10">
+            {STATS.map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 16 }}
+                animate={statsStarted ? { opacity: 1, y: 0 } : {}}
+                transition={{
+                  duration: shouldReduceMotion ? 0.01 : 0.6,
+                  delay: shouldReduceMotion ? 0 : index * 0.1,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="flex flex-col items-center text-center px-2 sm:px-4 lg:px-6 group"
+              >
+                {/* Minimal outline icon badge (48-52px rounded-square badge, soft muted pale sage green) */}
+                <div className="mb-3 flex h-12 w-12 sm:h-[52px] sm:w-[52px] items-center justify-center rounded-[18px] bg-[#EBF2E4] text-[#243B2A] border border-[#3E6B20]/15 shadow-2xs group-hover:scale-105 group-hover:bg-[#E2EDD8] transition-all duration-300">
+                  <Icon name={stat.icon} className="h-6 w-6 sm:h-7 sm:w-7 text-[#243B2A]" />
                 </div>
-              </li>
+
+                {/* Prominent Number Counter (refined, well-balanced sizing) */}
+                <div className="flex items-baseline justify-center font-extrabold tracking-tight text-[#162E20] text-2xl sm:text-3xl md:text-[2.25rem] lg:text-[2.5rem] leading-none">
+                  <span>
+                    <AnimatedCounter
+                      end={stat.value}
+                      duration={2000}
+                      isVisible={statsStarted}
+                      shouldReduceMotion={shouldReduceMotion}
+                    />
+                  </span>
+                  <span className="text-[#4D7C24] font-bold ml-1 text-lg sm:text-xl lg:text-2xl select-none">
+                    {stat.suffix}
+                  </span>
+                </div>
+
+                {/* Primary Metric Label */}
+                <div className="mt-2 text-[13px] sm:text-[14.5px] font-bold text-[#1E3B27] tracking-tight leading-snug">
+                  {stat.label}
+                </div>
+
+                {/* Supportive Subtext */}
+                <div className="mt-0.5 text-xs text-[#5D6D5B] font-normal leading-relaxed max-w-[185px]">
+                  {stat.subtext}
+                </div>
+              </motion.div>
             ))}
-          </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* 2.5 WHO ARE WE Section */}
+      <section
+        ref={whoWeAreRef}
+        data-who-we-are
+        aria-labelledby="who-we-are-title"
+        className="relative bg-[#FAF9F5] py-16 sm:py-20 lg:py-24 border-b border-[#243B2A]/10 overflow-hidden"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-14 xl:gap-16">
+            
+            {/* Left Column — Content (~48% width) */}
+            <motion.div
+              initial="hidden"
+              animate={whoWeAreStarted ? "visible" : "hidden"}
+              className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center"
+            >
+              
+              {/* 1. Eyebrow Label: 700ms duration, 150ms initial delay */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      duration: shouldReduceMotion ? 0.01 : 0.7,
+                      delay: shouldReduceMotion ? 0 : 0.15,
+                      ease: [0.22, 1, 0.36, 1],
+                    },
+                  },
+                }}
+                className="flex items-center gap-3"
+              >
+                <span className="h-[2px] w-8 sm:w-10 rounded-full bg-[#46733B]" aria-hidden="true" />
+                <span className="text-[12px] sm:text-[13px] font-bold uppercase tracking-[0.2em] text-[#46733B]">
+                  WHO ARE WE
+                </span>
+              </motion.div>
+
+              {/* 2. Bold Dark Forest Green Heading: 850ms duration, 350ms delay */}
+              <motion.h2
+                id="who-we-are-title"
+                variants={{
+                  hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 22 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      duration: shouldReduceMotion ? 0.01 : 0.85,
+                      delay: shouldReduceMotion ? 0 : 0.35,
+                      ease: [0.22, 1, 0.36, 1],
+                    },
+                  },
+                }}
+                className="mt-4 text-3xl font-extrabold tracking-tight text-[#173322] sm:text-4xl lg:text-[42px] lg:leading-[1.18]"
+              >
+                A Safe Space to Understand Yourself and Grow.
+              </motion.h2>
+
+              {/* 3. Three Well-Spaced Paragraphs: 750ms each, staggered by ~200ms (550ms, 750ms, 950ms) */}
+              <div className="mt-6 space-y-4 text-[15px] sm:text-[16px] leading-[1.68] text-[#556655]">
+                <motion.p
+                  variants={{
+                    hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: {
+                        duration: shouldReduceMotion ? 0.01 : 0.75,
+                        delay: shouldReduceMotion ? 0 : 0.55,
+                        ease: [0.22, 1, 0.36, 1],
+                      },
+                    },
+                  }}
+                >
+                  At The Master Mind, we believe everyone deserves a safe, supportive space to explore their thoughts, understand their emotions, and discover their potential.
+                </motion.p>
+                <motion.p
+                  variants={{
+                    hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: {
+                        duration: shouldReduceMotion ? 0.01 : 0.75,
+                        delay: shouldReduceMotion ? 0 : 0.75,
+                        ease: [0.22, 1, 0.36, 1],
+                      },
+                    },
+                  }}
+                >
+                  Our approach focuses on compassionate guidance, personalised support, and practical strategies that help individuals navigate life&apos;s challenges with greater confidence and clarity.
+                </motion.p>
+                <motion.p
+                  variants={{
+                    hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: {
+                        duration: shouldReduceMotion ? 0.01 : 0.75,
+                        delay: shouldReduceMotion ? 0 : 0.95,
+                        ease: [0.22, 1, 0.36, 1],
+                      },
+                    },
+                  }}
+                >
+                  Whether you are seeking emotional support, personal development, life skills training, or career guidance, we aim to help you take meaningful steps towards a healthier, more balanced future.
+                </motion.p>
+              </div>
+
+              {/* 4. Action Buttons: 700ms duration, ~1,150ms delay */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      duration: shouldReduceMotion ? 0.01 : 0.7,
+                      delay: shouldReduceMotion ? 0 : 1.15,
+                      ease: [0.22, 1, 0.36, 1],
+                    },
+                  },
+                }}
+                className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4"
+              >
+                <Link
+                  to="/about#our-approach"
+                  className="group inline-flex items-center justify-center gap-2.5 rounded-xl bg-[#3D6E35] px-6 py-3.5 text-sm sm:text-base font-semibold text-white shadow-sm shadow-[#3D6E35]/25 hover:bg-[#34622C] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3D6E35]"
+                >
+                  <span>Discover Our Approach</span>
+                  <Icon
+                    name="arrow-right"
+                    className="h-4 w-4 text-white transition-transform duration-200 group-hover:translate-x-1"
+                  />
+                </Link>
+
+                <Link
+                  to="/about"
+                  className="inline-flex items-center justify-center rounded-xl border border-[#3D6E35]/40 bg-transparent px-6 py-3.5 text-sm sm:text-base font-semibold text-[#224424] hover:bg-[#E8F0E2] hover:border-[#3D6E35] hover:-translate-y-0.5 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3D6E35]"
+                >
+                  About Us
+                </Link>
+              </motion.div>
+            </motion.div>
+
+            {/* Right Column — Image with Backing Panel and Floating Card (~52% width) */}
+            <div className="lg:col-span-6 xl:col-span-6 relative pb-6 sm:pb-8 lg:pb-0">
+              <div className="relative mx-auto w-full max-w-[580px] lg:max-w-none">
+                
+                {/* Offset Pale Sage-Green Backing Panel */}
+                <motion.div
+                  aria-hidden="true"
+                  initial={{ opacity: shouldReduceMotion ? 1 : 0, scale: shouldReduceMotion ? 1 : 0.96 }}
+                  animate={whoWeAreStarted ? { opacity: 1, scale: 1 } : {}}
+                  transition={{
+                    duration: shouldReduceMotion ? 0.01 : 0.85,
+                    ease: [0.22, 1, 0.36, 1],
+                    delay: shouldReduceMotion ? 0 : 0.15,
+                  }}
+                  className="absolute inset-0 translate-x-3 translate-y-3 sm:translate-x-5 sm:translate-y-5 rounded-[26px] sm:rounded-[32px] bg-[#E3EBDC] -rotate-1 border border-[#D0DFC6]/70 pointer-events-none"
+                />
+
+                {/* Main Counselling Image Container with smooth clip-path: 1,300ms duration, 250ms delay */}
+                <motion.div
+                  initial={{
+                    opacity: shouldReduceMotion ? 1 : 0,
+                    clipPath: shouldReduceMotion ? "inset(0% 0% 0% 0%)" : "inset(0% 100% 0% 0% round 26px)",
+                  }}
+                  animate={
+                    whoWeAreStarted
+                      ? {
+                          opacity: 1,
+                          clipPath: "inset(0% 0% 0% 0% round 26px)",
+                        }
+                      : {}
+                  }
+                  transition={{
+                    duration: shouldReduceMotion ? 0.01 : 1.3,
+                    ease: [0.22, 1, 0.36, 1],
+                    delay: shouldReduceMotion ? 0 : 0.25,
+                  }}
+                  className="relative rounded-[22px] sm:rounded-[28px] bg-white p-2.5 sm:p-3 shadow-[0_12px_36px_rgba(24,42,27,0.08)] border border-[#E1EAD8]"
+                >
+                  <img
+                    src={whoWeAreImg}
+                    alt="Compassionate counsellor speaking warmly with a client in a bright, modern therapy room"
+                    loading="lazy"
+                    className="aspect-[4/3] w-full rounded-[16px] sm:rounded-[22px] object-cover object-center"
+                  />
+                </motion.div>
+
+                {/* 6. Floating Dark Forest Green Information Card: 850ms duration, 800ms delay
+                    Placed OUTSIDE the clip-path container so it is NEVER clipped at the bottom or sides */}
+                <motion.div
+                  initial={{
+                    opacity: shouldReduceMotion ? 1 : 0,
+                    y: shouldReduceMotion ? 0 : 18,
+                  }}
+                  animate={
+                    whoWeAreStarted
+                      ? {
+                          opacity: 1,
+                          y: 0,
+                        }
+                      : {}
+                  }
+                  transition={{
+                    duration: shouldReduceMotion ? 0.01 : 0.85,
+                    ease: [0.22, 1, 0.36, 1],
+                    delay: shouldReduceMotion ? 0 : 0.8,
+                  }}
+                  className="absolute bottom-1 left-2 sm:bottom-2 sm:left-2 z-30 flex items-center gap-3.5 sm:gap-4 rounded-2xl bg-[#3E7036] px-4 py-3 sm:px-5 sm:py-3.5 text-white shadow-2xl shadow-[#142A12]/30 border border-white/20 select-none"
+                >
+                  <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center text-white">
+                    <Icon name="communitySupport" className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
+                  </div>
+                  <div className="flex flex-col text-left leading-tight tracking-wider text-[11px] sm:text-[12px] font-extrabold uppercase text-white space-y-0.5">
+                    <span>SUPPORTING</span>
+                    <span>BRIGHTER</span>
+                    <span>TOMORROWS</span>
+                  </div>
+                </motion.div>
+
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -597,7 +970,7 @@ export default function Home() {
           />
           <div
             data-reveal-stagger="200"
-            className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3"
+            className="mt-12 sm:mt-14 grid gap-x-6 sm:gap-x-7 lg:gap-x-8 gap-y-6 sm:gap-y-7 sm:grid-cols-2 lg:grid-cols-3"
           >
             {HOW_WE_HELP.map((service) => (
               <ServiceCard key={service.id} {...service} />
