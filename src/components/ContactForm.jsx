@@ -232,7 +232,7 @@ export default function ContactForm() {
             aria-describedby={describedBy("phone")}
             value={values.phone}
             onChange={setField("phone")}
-            placeholder="+1 555 000 0000"
+            placeholder="+91 98765 43210"
             className={`${inputClasses} ${errors.phone ? errBorder : okBorder}`}
           />
           <FieldError name="phone" errors={errors} />

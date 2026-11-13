@@ -4,7 +4,7 @@ export const SITE = {
   name: "The Master Mind",
   tagline: "A safe space to talk, heal, and grow.",
   email: publicEnv.VITE_SITE_EMAIL || "care@themastermind.example",
-  phone: publicEnv.VITE_SITE_PHONE || "+1 (555) 010-2400",
+  phone: publicEnv.VITE_SITE_PHONE || "+91 761 875 1717",
   whatsapp: publicEnv.VITE_SITE_WHATSAPP || "+91 761 875 1717",
   address: "No 12, 60ft, 1st Main Rd, Shivanagar, Rajajinagar, Bengaluru, Karnataka 560010",
   hours: "Mon – Sat, 9:00 AM – 7:00 PM",
